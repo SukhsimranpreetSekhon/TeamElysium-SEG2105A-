@@ -4,17 +4,19 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Register"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    tools:context=".Register">
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="0dp"
+        android:layout_height="495dp"
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
         android:orientation="vertical"
-        tools:layout_editor_absoluteY="8dp"
-        >
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
         <ImageView
             android:id="@+id/imageView"
@@ -38,15 +40,15 @@
             android:layout_height="wrap_content"
             android:gravity="center"
             android:hint="@string/enter_password"
-            android:inputType="textPassword" />
+            android:inputType="textPassword"
+             />
 
         <TextView
             android:id="@+id/textViewType"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/account_type"
             android:gravity="center"
-            />
+            android:text="@string/account_type" />
 
         <Spinner
             android:id="@+id/spinnerChoice"
@@ -64,13 +66,14 @@
             android:layout_height="wrap_content"
             android:gravity="center"
             android:hint="@string/enter_firstName"
-            android:inputType="textPersonName" />
+            android:inputType="textPersonName"
+             />
 
         <EditText
             android:id="@+id/editTextLastName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:autofillHints=""
+
             android:gravity="center"
             android:hint="@string/enter_lastName"
             android:inputType="textPersonName" />
@@ -79,7 +82,6 @@
             android:id="@+id/editTextPhoneNumber"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:autofillHints=""
             android:gravity="center"
             android:hint="@string/enter_phone"
             android:inputType="textPersonName" />
@@ -90,14 +92,14 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/signup" />
+
         <TextView
             android:id="@+id/textViewLogin"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/loginhere"
             android:gravity="center"
-            android:textColor="@color/design_default_color_primary_dark"
-            />
+            android:text="@string/loginhere"
+            android:textColor="@color/design_default_color_primary_dark" />
     </LinearLayout>
 
 </android.support.constraint.ConstraintLayout>
