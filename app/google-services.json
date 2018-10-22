@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "998907550651",
+    "firebase_url": "https://serviceproviders-f751f.firebaseio.com",
+    "project_id": "serviceproviders-f751f",
+    "storage_bucket": "serviceproviders-f751f.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:998907550651:android:b96eeb2e1306a9ba",
+        "android_client_info": {
+          "package_name": "com.example.vekshan.myapplication"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "998907550651-bjs5tcg5hlb2ur35j7jlllikddgjhikv.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA0qWEgq8iPIOJ6cW7sj6hQEqcjIGuwoKI"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
