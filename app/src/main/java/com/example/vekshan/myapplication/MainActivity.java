@@ -1,5 +1,6 @@
 package com.example.vekshan.myapplication;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -13,7 +14,7 @@ import android.widget.TextView;
 import org.w3c.dom.Text;
 
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener, AdapterView.OnItemSelectedListener{
+public class MainActivity extends AppCompatActivity implements View.OnClickListener{
 
     private Button btnLogIn;
     private EditText editTextEmail;
@@ -50,10 +51,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         }
         if (view == textViewSignUp) {
-
+            startActivity(new Intent(this, Register.class));
         }
     }
-    
+
 
 
 
