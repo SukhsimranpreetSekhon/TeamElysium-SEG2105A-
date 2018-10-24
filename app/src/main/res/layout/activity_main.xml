@@ -32,7 +32,7 @@
             android:layout_height="15dp" />
 
         <EditText
-            android:id="@+id/editTextEmail"
+            android:id="@+id/edit_txt_Email"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
@@ -40,7 +40,7 @@
             android:inputType="textEmailAddress" />
 
         <EditText
-            android:id="@+id/editTextPassword"
+            android:id="@+id/edit_txt_Password"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
@@ -55,7 +55,7 @@
             android:text="@string/login" />
 
         <TextView
-            android:id="@+id/textViewSignUp"
+            android:id="@+id/txt_view_Register"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/signuphere"

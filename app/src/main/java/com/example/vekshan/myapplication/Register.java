@@ -24,13 +24,13 @@ import com.google.firebase.auth.FirebaseAuth;
 
 
 public class Register extends AppCompatActivity implements View.OnClickListener, AdapterView.OnItemSelectedListener{
-    private TextView textViewLogin;
+    private TextView txt_view_Login;
     private Button btnRegister;
-    private EditText editTextEmail;
-    private EditText editTextPassword;
-    private EditText editTextFirstName;
-    private EditText editTextLastName;
-    private EditText editTextPhoneNumber;
+    private EditText edit_txt_Email;
+    private EditText edit_txt_Password;
+    private EditText edit_txt_FirstName;
+    private EditText edit_txt_LastName;
+    private EditText edit_txt_PhoneNumber;
     private Spinner spinnerChoice;
     private ArrayAdapter<CharSequence> adapter;
     private FirebaseAuth firebaseAuth;
@@ -44,14 +44,15 @@ public class Register extends AppCompatActivity implements View.OnClickListener,
 
         //Intializing views
         btnRegister = findViewById(R.id.btnRegister);
-        editTextEmail = findViewById(R.id.editTextEmail);
-        editTextPassword = findViewById(R.id.editTextPassword);
-        editTextFirstName = findViewById(R.id.editTextFirstName);
-        editTextLastName = findViewById(R.id.editTextLastName);
-        editTextPhoneNumber = findViewById(R.id.editTextPhoneNumber);
+        edit_txt_Email = findViewById(R.id.edit_txt_Email);
+        edit_txt_Password = findViewById(R.id.edit_txt_Password);
+        edit_txt_FirstName = findViewById(R.id.edit_txt_FirstName);
+        edit_txt_LastName = findViewById(R.id.edit_txt_LastName);
+        edit_txt_PhoneNumber = findViewById(R.id.edit_txt_PhoneNumber);
         spinnerChoice =findViewById(R.id.spinnerChoice);
-        textViewLogin =findViewById(R.id.textViewLogin);
+        txt_view_Login =findViewById(R.id.txt_view_Login);
 
+        //spinner
         adapter =ArrayAdapter.createFromResource(this,R.array.accountTypes,android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerChoice.setAdapter(adapter);
@@ -59,22 +60,25 @@ public class Register extends AppCompatActivity implements View.OnClickListener,
         //Setting listeners
         btnRegister.setOnClickListener(this);
         spinnerChoice.setOnItemSelectedListener(this);
+        txt_view_Login.setOnClickListener(this);
 
     }
 
     @Override
     public void onClick(View view) {
         if (view == btnRegister){
+            //call method register
             register();
         }
-        if (view == textViewLogin) {
+        if (view == txt_view_Login) {
+            //open the MainActivity which is the log in screen
             startActivity(new Intent(this, MainActivity.class));
         }
     }
 
     private void register() {
-        String email = editTextEmail.getText().toString().trim();
-        String password = editTextEmail.getText().toString().trim();
+        String email = edit_txt_Email.getText().toString().trim();
+        String password = edit_txt_Password.getText().toString().trim();
 
         if(TextUtils.isEmpty(email)){
             Toast.makeText(this, "Email field cannot be empty!", Toast.LENGTH_SHORT).show();
@@ -91,6 +95,9 @@ public class Register extends AppCompatActivity implements View.OnClickListener,
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if (task.isSuccessful()){
                     Toast.makeText(Register.this,"Registration Complete!", Toast.LENGTH_SHORT).show();
+                    finish(); //finish this activity before opening a new one
+                    //open the Welcome screen
+                    startActivity(new Intent(getApplicationContext(), WelcomeScreenActivity.class));
                 }else{
                     Toast.makeText(Register.this,"Registration Failed! Please try again!", Toast.LENGTH_SHORT).show();
                 }

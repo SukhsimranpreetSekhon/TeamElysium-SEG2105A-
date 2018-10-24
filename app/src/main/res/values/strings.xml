@@ -3,6 +3,7 @@
     <string name="signuphere"><u>Click here to create a new account</u></string>
     <string name="signup"><u>Sign Up</u></string>
     <string name="login">Login</string>
+    <string name="logout">Logout</string>
     <string name="loginhere">Click here to use an existing account</string>
     <string name="enter_email">Enter email</string>
     <string name="enter_password">Enter password</string>
