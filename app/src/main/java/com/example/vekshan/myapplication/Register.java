@@ -5,6 +5,7 @@ import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Patterns;
 import android.view.View.OnClickListener;
 import android.widget.ArrayAdapter;
 import android.view.View;
@@ -17,13 +18,14 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.common.internal.AccountType;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 
 
-public class Register extends AppCompatActivity implements View.OnClickListener, AdapterView.OnItemSelectedListener{
+public class Register extends AppCompatActivity implements View.OnClickListener{
     private TextView txt_view_Login;
     private Button btnRegister;
     private EditText edit_txt_Email;
@@ -34,6 +36,7 @@ public class Register extends AppCompatActivity implements View.OnClickListener,
     private Spinner spinnerChoice;
     private ArrayAdapter<CharSequence> adapter;
     private FirebaseAuth firebaseAuth;
+    //private String accountType;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,6 +55,7 @@ public class Register extends AppCompatActivity implements View.OnClickListener,
         spinnerChoice =findViewById(R.id.spinnerChoice);
         txt_view_Login =findViewById(R.id.txt_view_Login);
 
+
         //spinner
         adapter =ArrayAdapter.createFromResource(this,R.array.accountTypes,android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -59,9 +63,18 @@ public class Register extends AppCompatActivity implements View.OnClickListener,
 
         //Setting listeners
         btnRegister.setOnClickListener(this);
-        spinnerChoice.setOnItemSelectedListener(this);
+    //    spinnerChoice.setOnItemSelectedListener(this);
         txt_view_Login.setOnClickListener(this);
 
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+        if(firebaseAuth.getCurrentUser() != null){
+
+        }
     }
 
     @Override
@@ -77,11 +90,22 @@ public class Register extends AppCompatActivity implements View.OnClickListener,
     }
 
     private void register() {
-        String email = edit_txt_Email.getText().toString().trim();
-        String password = edit_txt_Password.getText().toString().trim();
+        final String email = edit_txt_Email.getText().toString().trim();
+        final String password = edit_txt_Password.getText().toString().trim();
+        final String firstName = edit_txt_FirstName.getText().toString().trim();
+        final String lastName = edit_txt_LastName.getText().toString().trim();
+        final String phoneNumber = edit_txt_PhoneNumber.getText().toString().trim();
+        final String accountType = spinnerChoice.getSelectedItem().toString().trim();
 
-        if(TextUtils.isEmpty(email)){
+
+      if(TextUtils.isEmpty(email)){
             Toast.makeText(this, "Email field cannot be empty!", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        if(!Patterns.EMAIL_ADDRESS.matcher(email).matches()){
+            edit_txt_Email.setError("Please enter a valid email");
+            edit_txt_Email.requestFocus();
             return;
         }
 
@@ -89,6 +113,64 @@ public class Register extends AppCompatActivity implements View.OnClickListener,
             Toast.makeText(this, "Password field cannot be empty!", Toast.LENGTH_SHORT).show();
             return;
         }
+
+        if(password.length()<6){
+            edit_txt_Password.setError("Minimum length of password should be 6");
+        }
+
+        firebaseAuth.createUserWithEmailAndPassword(email,password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+            @Override
+            public void onComplete(@NonNull Task<AuthResult> task) {
+                if(task.isSuccessful()){
+                    if(accountType.equals("Administrator")){
+                        Administrator admin = new Administrator(firstName, lastName, email, phoneNumber);
+
+                        FirebaseDatabase.getInstance().getReference("Administrator").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).setValue(admin).addOnCompleteListener(new OnCompleteListener<Void>() {
+                            @Override
+                            public void onComplete(@NonNull Task<Void> task){
+                                if(task.isSuccessful()) {
+                                    Toast.makeText(MainActivity.this, getString(R.string.registration_success),Toast.LENGTH_LONG).show(){
+
+                                    }
+                                }
+                            }
+                        });
+                    }
+
+                    if(accountType.equals("Service Provider")){
+                        ServiceProvider serviceProvider = new ServiceProvider();
+
+                        FirebaseDatabase.getInstance().getReference("Administrator").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).setValue(admin).addOnCompleteListener(new OnCompleteListener<Void>() {
+                            @Override
+                            public void onComplete(@NonNull Task<Void> task){
+                                if(task.isSuccessful()) {
+                                    Toast.makeText(MainActivity.this, getString(R.string.registration_success),Toast.LENGTH_LONG).show(){
+
+                                    }
+                                }
+                            }
+                        });
+
+                    }
+                    
+
+
+
+
+                }else{
+                    Toast.makeText(MainActivity.this,task.getException().getMessage(),Toast.LENGTH_LONG).show();
+                }
+            }
+        });
+
+        firebaseAuth.createUserWithEmailAndPassword(email,password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+            @Override
+            public void onComplete(@NonNull Task<AuthResult> task) {
+                if(task.isSuccessful()){
+                    Toast.makeText(getApplicationContext(),"User Register Success", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
 
         firebaseAuth.createUserWithEmailAndPassword(email,password).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
             @Override
@@ -105,14 +187,19 @@ public class Register extends AppCompatActivity implements View.OnClickListener,
         });
 
     }
-
+/*
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+        accountType = spinnerChoice.getSelectedItem().toString();
+
+
 
     }
 
     @Override
     public void onNothingSelected(AdapterView<?> parent) {
+        Toast.makeText(this,"Please select account type",Toast.LENGTH_SHORT).show();
 
     }
+    */
 }
