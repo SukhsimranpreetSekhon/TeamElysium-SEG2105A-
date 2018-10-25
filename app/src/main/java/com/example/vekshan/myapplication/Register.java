@@ -23,6 +23,8 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 
 public class Register extends AppCompatActivity implements View.OnClickListener{
@@ -36,6 +38,10 @@ public class Register extends AppCompatActivity implements View.OnClickListener{
     private Spinner spinnerChoice;
     private ArrayAdapter<CharSequence> adapter;
     private FirebaseAuth firebaseAuth;
+    private DatabaseReference dataAdmin;
+    private DatabaseReference dataHomeOwner;
+    private DatabaseReference dataServiceProvider;
+    private Boolean hasAdmin;
     //private String accountType;
 
     @Override
@@ -44,6 +50,11 @@ public class Register extends AppCompatActivity implements View.OnClickListener{
         setContentView(R.layout.activity_register);
 
         firebaseAuth = FirebaseAuth.getInstance();
+        dataAdmin = FirebaseDatabase.getInstance().getReference("Administrators");
+        dataHomeOwner = FirebaseDatabase.getInstance().getReference("HomeOwners");
+        dataServiceProvider=FirebaseDatabase.getInstance().getReference("ServiceProviders");
+
+        hasAdmin =false;
 
         //Intializing views
         btnRegister = findViewById(R.id.btnRegister);
@@ -118,52 +129,78 @@ public class Register extends AppCompatActivity implements View.OnClickListener{
             edit_txt_Password.setError("Minimum length of password should be 6");
         }
 
-        firebaseAuth.createUserWithEmailAndPassword(email,password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+            firebaseAuth.createUserWithEmailAndPassword(email,password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if(task.isSuccessful()){
                     if(accountType.equals("Administrator")){
-                        Administrator admin = new Administrator(firstName, lastName, email, phoneNumber);
 
-                        FirebaseDatabase.getInstance().getReference("Administrator").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).setValue(admin).addOnCompleteListener(new OnCompleteListener<Void>() {
-                            @Override
-                            public void onComplete(@NonNull Task<Void> task){
-                                if(task.isSuccessful()) {
-                                    Toast.makeText(MainActivity.this, getString(R.string.registration_success),Toast.LENGTH_LONG).show(){
+                        if (hasAdmin==false) {
 
+                            hasAdmin =true;
+                            Administrator admin = new Administrator(firstName, lastName, email, phoneNumber);
+
+                            dataAdmin.child(FirebaseAuth.getInstance().getCurrentUser().getUid()).setValue(admin).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                @Override
+                                public void onComplete(@NonNull Task<Void> task) {
+                                    if (task.isSuccessful()) {
+                                        Toast.makeText(Register.this, "Registration Complete!", Toast.LENGTH_SHORT).show();
+                                        { //use this as message below, vb
+                                        }
+
+                                    } else {
+                                        Toast.makeText(Register.this, "Registration Failed! Please try again!", Toast.LENGTH_SHORT).show();
                                     }
                                 }
-                            }
-                        });
+                            });
+                        }else{
+                            Toast.makeText(Register.this, "Admin account already created!", Toast.LENGTH_LONG).show();
+                        }
                     }
 
                     if(accountType.equals("Service Provider")){
                         ServiceProvider serviceProvider = new ServiceProvider();
 
-                        FirebaseDatabase.getInstance().getReference("Administrator").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).setValue(admin).addOnCompleteListener(new OnCompleteListener<Void>() {
+                        dataServiceProvider.child(FirebaseAuth.getInstance().getCurrentUser().getUid()).setValue(serviceProvider).addOnCompleteListener(new OnCompleteListener<Void>() {
                             @Override
                             public void onComplete(@NonNull Task<Void> task){
                                 if(task.isSuccessful()) {
-                                    Toast.makeText(MainActivity.this, getString(R.string.registration_success),Toast.LENGTH_LONG).show(){
-
+                                    Toast.makeText(Register.this,"Registration Complete",Toast.LENGTH_LONG).show();{
                                     }
+                                }else{
+                                    Toast.makeText(Register.this,"Registration Failed! Please try again!", Toast.LENGTH_SHORT).show(); //update string.xml if you want to use res..., vb
                                 }
                             }
                         });
 
                     }
-                    
 
+                    if(accountType.equals("Homeowner")){
+                        HomeOwner homeowner = new HomeOwner(firstName,lastName,email,phoneNumber);
+
+                        dataHomeOwner.child(FirebaseAuth.getInstance().getCurrentUser().getUid()).setValue(homeowner).addOnCompleteListener(new OnCompleteListener<Void>() {
+                            @Override
+                            public void onComplete(@NonNull Task<Void> task){
+                                if(task.isSuccessful()) {
+                                    Toast.makeText(Register.this,"Registration Complete",Toast.LENGTH_LONG).show();{
+                                    }
+                                }else{
+                                    Toast.makeText(Register.this,"Registration Failed! Please try again!", Toast.LENGTH_SHORT).show();
+                                }
+                            }
+                        });
+
+                    }
 
 
 
                 }else{
-                    Toast.makeText(MainActivity.this,task.getException().getMessage(),Toast.LENGTH_LONG).show();
+                    Toast.makeText(Register.this,task.getException().getMessage(),Toast.LENGTH_LONG).show(); //do not change my code just ammend it,vb
                 }
             }
         });
 
-        firebaseAuth.createUserWithEmailAndPassword(email,password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+ /*       firebaseAuth.createUserWithEmailAndPassword(email,password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if(task.isSuccessful()){
@@ -176,6 +213,20 @@ public class Register extends AppCompatActivity implements View.OnClickListener{
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if (task.isSuccessful()){
+                    if(accountType.equals("Administrator")){
+                        Administrator admin = new Administrator(firstName, lastName, email, phoneNumber);
+
+                        dataAdmin.child(FirebaseAuth.getInstance().getUid()).setValue(admin).addOnCompleteListener(this, new OnCompleteListener<Void>() {
+                            @Override
+                            public void onComplete(@NonNull Task<Void> task) {
+
+                            }
+
+                        } {
+
+                        });
+
+                    }
                     Toast.makeText(Register.this,"Registration Complete!", Toast.LENGTH_SHORT).show();
                     finish(); //finish this activity before opening a new one
                     //open the Welcome screen
@@ -187,7 +238,7 @@ public class Register extends AppCompatActivity implements View.OnClickListener{
         });
 
     }
-/*
+
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
         accountType = spinnerChoice.getSelectedItem().toString();
@@ -199,7 +250,7 @@ public class Register extends AppCompatActivity implements View.OnClickListener{
     @Override
     public void onNothingSelected(AdapterView<?> parent) {
         Toast.makeText(this,"Please select account type",Toast.LENGTH_SHORT).show();
-
-    }
     */
+    }
+
 }
