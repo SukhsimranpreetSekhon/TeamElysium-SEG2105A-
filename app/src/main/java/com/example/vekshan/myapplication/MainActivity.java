@@ -18,6 +18,8 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import org.w3c.dom.Text;
 
@@ -29,7 +31,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private EditText edit_txt_Password;
     private TextView txt_view_Register;
     private FirebaseAuth firebaseAuth;
-
+    private Spinner spinnerChoice;
+    private ArrayAdapter<CharSequence> adapter;
+    private DatabaseReference data;
 
 
     @Override
@@ -45,10 +49,18 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         edit_txt_Email= findViewById(R.id.edit_txt_Email);
         edit_txt_Password = findViewById(R.id.edit_txt_Password);
+        spinnerChoice =findViewById(R.id.spinnerChoice);
+
+
+        //spinner
+        adapter =ArrayAdapter.createFromResource(this,R.array.accountTypes,android.R.layout.simple_spinner_item);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinnerChoice.setAdapter(adapter);
 
         //Setting listeners
         btnLogIn.setOnClickListener(this);
         txt_view_Register.setOnClickListener(this);
+
 
 
 
@@ -72,8 +84,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void login() {
-        String email = edit_txt_Email.getText().toString().trim();
-        String password = edit_txt_Password.getText().toString().trim();
+        final String email = edit_txt_Email.getText().toString().trim();
+        final String password = edit_txt_Password.getText().toString().trim();
+        final String accountType = spinnerChoice.getSelectedItem().toString().trim();
+
+        data = FirebaseDatabase.getInstance().getReference().child(accountType).child(FirebaseAuth.getInstance().getCurrentUser().getUid());
+        //implement code to see required login screen
+
         if(TextUtils.isEmpty(email)){
             Toast.makeText(this, "Email field cannot be empty!", Toast.LENGTH_SHORT).show();
             return;
@@ -83,6 +100,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             Toast.makeText(this, "Password field cannot be empty!", Toast.LENGTH_SHORT).show();
             return;
         }
+
 
         firebaseAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
             @Override

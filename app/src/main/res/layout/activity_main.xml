@@ -13,7 +13,10 @@
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
         android:orientation="vertical"
-        tools:layout_editor_absoluteY="8dp">
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
         <Space
             android:layout_width="match_parent"
@@ -47,6 +50,15 @@
             android:hint="@string/enter_password"
             android:inputType="textPassword" />
 
+        <Spinner
+            android:id="@+id/spinnerChoice"
+            android:layout_width="wrap_content"
+            android:layout_height="30dp"
+            android:layout_gravity="center"
+            android:entries="@array/accountTypes"
+            android:gravity="center"
+            android:textAlignment="center" />
+
 
         <Button
             android:id="@+id/btnLogIn"
@@ -58,10 +70,9 @@
             android:id="@+id/txt_view_Register"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/signuphere"
             android:gravity="center"
-            android:textColor="@color/design_default_color_primary_dark"
-            />
+            android:text="@string/signuphere"
+            android:textColor="@color/design_default_color_primary_dark" />
     </LinearLayout>
 
 </android.support.constraint.ConstraintLayout>

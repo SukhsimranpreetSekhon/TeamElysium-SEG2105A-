@@ -129,6 +129,21 @@ public class Register extends AppCompatActivity implements View.OnClickListener{
             edit_txt_Password.setError("Minimum length of password should be 6");
         }
 
+        if(TextUtils.isEmpty(firstName)){
+            Toast.makeText(this, "First Name field cannot be empty!", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        if(TextUtils.isEmpty(lastName)){
+            Toast.makeText(this, "Last Name field cannot be empty!", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        if(TextUtils.isEmpty(phoneNumber)){
+            Toast.makeText(this, "Phone Number field cannot be empty!", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
             firebaseAuth.createUserWithEmailAndPassword(email,password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
@@ -147,7 +162,11 @@ public class Register extends AppCompatActivity implements View.OnClickListener{
                                         Toast.makeText(Register.this, "Registration Complete!", Toast.LENGTH_SHORT).show();
                                         { //use this as message below, vb
                                         }
-
+                                        Intent intent = new Intent(getApplicationContext(), WelcomeScreenActivity.class);
+                                        intent.putExtra("role",accountType);
+                                        intent.putExtra("name",firstName);
+                                        finish(); //finish this activity before opening a new one
+                                        startActivity(intent);
                                     } else {
                                         Toast.makeText(Register.this, "Registration Failed! Please try again!", Toast.LENGTH_SHORT).show();
                                     }
@@ -159,7 +178,7 @@ public class Register extends AppCompatActivity implements View.OnClickListener{
                     }
 
                     if(accountType.equals("Service Provider")){
-                        ServiceProvider serviceProvider = new ServiceProvider();
+                        ServiceProvider serviceProvider = new ServiceProvider(firstName, lastName, email, phoneNumber);
 
                         dataServiceProvider.child(FirebaseAuth.getInstance().getCurrentUser().getUid()).setValue(serviceProvider).addOnCompleteListener(new OnCompleteListener<Void>() {
                             @Override
@@ -167,6 +186,13 @@ public class Register extends AppCompatActivity implements View.OnClickListener{
                                 if(task.isSuccessful()) {
                                     Toast.makeText(Register.this,"Registration Complete",Toast.LENGTH_LONG).show();{
                                     }
+
+                                    //open the Welcome screen
+                                    Intent intent = new Intent(getApplicationContext(), WelcomeScreenActivity.class);
+                                    intent.putExtra("role",accountType);
+                                    intent.putExtra("name",firstName);
+                                    finish(); //finish this activity before opening a new one
+                                    startActivity(intent);
                                 }else{
                                     Toast.makeText(Register.this,"Registration Failed! Please try again!", Toast.LENGTH_SHORT).show(); //update string.xml if you want to use res..., vb
                                 }
@@ -184,6 +210,11 @@ public class Register extends AppCompatActivity implements View.OnClickListener{
                                 if(task.isSuccessful()) {
                                     Toast.makeText(Register.this,"Registration Complete",Toast.LENGTH_LONG).show();{
                                     }
+                                    Intent intent = new Intent(getApplicationContext(), WelcomeScreenActivity.class);
+                                    intent.putExtra("role",accountType);
+                                    intent.putExtra("name",firstName);
+                                    finish(); //finish this activity before opening a new one
+                                    startActivity(intent);
                                 }else{
                                     Toast.makeText(Register.this,"Registration Failed! Please try again!", Toast.LENGTH_SHORT).show();
                                 }
