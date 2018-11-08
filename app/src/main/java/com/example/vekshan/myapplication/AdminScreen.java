@@ -28,7 +28,7 @@ public class AdminScreen extends AppCompatActivity {
 
         dataUser = FirebaseDatabase.getInstance().getReference();
         list_users= findViewById(R.id.list_users);
-        final ArrayAdapter<String> arrayAdapter=new ArrayAdapter<String>(this,android.R.layout.simple_list_item_1, ids);
+        /*final ArrayAdapter<String> arrayAdapter=new ArrayAdapter<String>(this,android.R.layout.simple_list_item_1, ids);
 
         list_users.setAdapter(arrayAdapter);
 
@@ -60,6 +60,6 @@ public class AdminScreen extends AppCompatActivity {
             public void onCancelled(@NonNull DatabaseError databaseError) {
 
             }
-        });
+        });*/
     }
 }

@@ -13,8 +13,8 @@
     <string name="account_type">Account Type: </string>
     <string name="logo">logo</string>
     <string-array name="accountTypes">
-        <item>Homeowner</item>
-        <item>Service Provider</item>
+        <item>HomeOwner</item>
+        <item>ServiceProvider</item>
         <item>Administrator</item>
     </string-array>
     <string name="title_activity_login">Sign in</string>

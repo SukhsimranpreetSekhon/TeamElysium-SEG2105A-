@@ -5,6 +5,7 @@ import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Patterns;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -18,8 +19,11 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import org.w3c.dom.Text;
 
@@ -34,6 +38,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private Spinner spinnerChoice;
     private ArrayAdapter<CharSequence> adapter;
     private DatabaseReference data;
+
 
 
     @Override
@@ -83,16 +88,25 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     }
 
+    private void loginFailed(){
+        Toast.makeText(MainActivity.this,"Log in Failed! Please try again!", Toast.LENGTH_SHORT).show();
+    }
+
+
     private void login() {
         final String email = edit_txt_Email.getText().toString().trim();
         final String password = edit_txt_Password.getText().toString().trim();
         final String accountType = spinnerChoice.getSelectedItem().toString().trim();
 
-        data = FirebaseDatabase.getInstance().getReference().child(accountType).child(FirebaseAuth.getInstance().getCurrentUser().getUid());
-        //implement code to see required login screen
 
         if(TextUtils.isEmpty(email)){
             Toast.makeText(this, "Email field cannot be empty!", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        if(!Patterns.EMAIL_ADDRESS.matcher(email).matches()){
+            edit_txt_Email.setError("Please enter a valid email");
+            edit_txt_Email.requestFocus();
             return;
         }
 
@@ -101,16 +115,62 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             return;
         }
 
+        if(password.length()<6){
+            edit_txt_Password.setError("Minimum length of password should be 6");
+        }
+
 
         firebaseAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
+
                 if (task.isSuccessful()){
-                    Toast.makeText(MainActivity.this,"Successfully logged in!", Toast.LENGTH_SHORT).show();
-                    finish();
-                    startActivity(new Intent(getApplicationContext(), WelcomeScreenActivity.class));
+                    data = FirebaseDatabase.getInstance().getReference().child(accountType).child(FirebaseAuth.getInstance().getCurrentUser().getUid());
+
+                    //implement code to see required login screen
+                    data.addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                            if (dataSnapshot.exists()) {
+                                    Toast.makeText(MainActivity.this,"Successfully logged in!", Toast.LENGTH_SHORT).show();
+                                    data.child("firstName").addValueEventListener(new ValueEventListener() {
+                                        @Override
+                                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                            String firstName = dataSnapshot.getValue(String.class);
+
+                                            Intent intent;
+                                            if (accountType.equals("Administrator")){
+                                                intent = new Intent(getApplicationContext(), AdminScreen.class);
+                                            }else{ //HomeOwner or ServiceProvider
+                                                intent = new Intent(getApplicationContext(), WelcomeScreenActivity.class);
+                                            }
+
+                                            intent.putExtra("role",accountType);
+                                            intent.putExtra("name",firstName);
+                                            finish(); //finish this activity before opening a new one
+                                            startActivity(intent);
+                                        }
+
+                                        @Override
+                                        public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                        }
+                                    });
+
+                            } else {
+                                loginFailed();
+                            }
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                        }
+                    });
+
+
                 }else{
-                    Toast.makeText(MainActivity.this,"Log in Failed! Please try again!", Toast.LENGTH_SHORT).show();
+                    loginFailed();
                 }
             }
         });

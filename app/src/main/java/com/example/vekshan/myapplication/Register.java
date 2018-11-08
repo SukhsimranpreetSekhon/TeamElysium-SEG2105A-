@@ -50,9 +50,9 @@ public class Register extends AppCompatActivity implements View.OnClickListener{
         setContentView(R.layout.activity_register);
 
         firebaseAuth = FirebaseAuth.getInstance();
-        dataAdmin = FirebaseDatabase.getInstance().getReference("Administrators");
-        dataHomeOwner = FirebaseDatabase.getInstance().getReference("HomeOwners");
-        dataServiceProvider=FirebaseDatabase.getInstance().getReference("ServiceProviders");
+        dataAdmin = FirebaseDatabase.getInstance().getReference("Administrator");
+        dataHomeOwner = FirebaseDatabase.getInstance().getReference("HomeOwner");
+        dataServiceProvider=FirebaseDatabase.getInstance().getReference("ServiceProvider");
 
         hasAdmin =false;
 
@@ -150,7 +150,7 @@ public class Register extends AppCompatActivity implements View.OnClickListener{
                 if(task.isSuccessful()){
                     if(accountType.equals("Administrator")){
 
-                        if (hasAdmin==false) {
+                        if (hasAdmin==false) { //put hasAdmin as a field in database
 
                             hasAdmin =true;
                             Administrator admin = new Administrator(firstName, lastName, email, phoneNumber);
@@ -177,7 +177,7 @@ public class Register extends AppCompatActivity implements View.OnClickListener{
                         }
                     }
 
-                    if(accountType.equals("Service Provider")){
+                    if(accountType.equals("ServiceProvider")){
                         ServiceProvider serviceProvider = new ServiceProvider(firstName, lastName, email, phoneNumber);
 
                         dataServiceProvider.child(FirebaseAuth.getInstance().getCurrentUser().getUid()).setValue(serviceProvider).addOnCompleteListener(new OnCompleteListener<Void>() {
@@ -201,7 +201,7 @@ public class Register extends AppCompatActivity implements View.OnClickListener{
 
                     }
 
-                    if(accountType.equals("Homeowner")){
+                    if(accountType.equals("HomeOwner")){
                         HomeOwner homeowner = new HomeOwner(firstName,lastName,email,phoneNumber);
 
                         dataHomeOwner.child(FirebaseAuth.getInstance().getCurrentUser().getUid()).setValue(homeowner).addOnCompleteListener(new OnCompleteListener<Void>() {
