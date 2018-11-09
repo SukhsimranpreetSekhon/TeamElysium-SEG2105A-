@@ -35,7 +35,6 @@
             android:id="@+id/btnAdd"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/edit_txt_ServicePrice"
             android:layout_weight="1"
             android:text="Add" />
 
@@ -43,8 +42,6 @@
             android:id="@+id/btnDelete"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/edit_txt_ServicePrice"
-            android:layout_toRightOf="@id/btnAdd"
             android:layout_weight="1"
             android:text="Delete" />
 

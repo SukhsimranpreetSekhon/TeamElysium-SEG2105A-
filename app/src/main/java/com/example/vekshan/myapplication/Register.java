@@ -23,8 +23,11 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 
 public class Register extends AppCompatActivity implements View.OnClickListener{
@@ -150,31 +153,42 @@ public class Register extends AppCompatActivity implements View.OnClickListener{
                 if(task.isSuccessful()){
                     if(accountType.equals("Administrator")){
 
-                        if (hasAdmin==false) { //put hasAdmin as a field in database
+                       DatabaseReference data = FirebaseDatabase.getInstance().getReference().child(accountType);
+                       data.addValueEventListener(new ValueEventListener() {
+                           @Override
+                           public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                               if (!dataSnapshot.exists()) {
+                                   Administrator admin = new Administrator(firstName, lastName, email, phoneNumber);
 
-                            hasAdmin =true;
-                            Administrator admin = new Administrator(firstName, lastName, email, phoneNumber);
+                                   dataAdmin.child(FirebaseAuth.getInstance().getCurrentUser().getUid()).setValue(admin).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                       @Override
+                                       public void onComplete(@NonNull Task<Void> task) {
+                                           if (task.isSuccessful()) {
+                                               Toast.makeText(Register.this, "Registration Complete!", Toast.LENGTH_SHORT).show();
+                                               { //use this as message below, vb
+                                               }
+                                               Intent intent = new Intent(getApplicationContext(), WelcomeScreenActivity.class);
+                                               intent.putExtra("role",accountType);
+                                               intent.putExtra("name",firstName);
+                                               finish(); //finish this activity before opening a new one
+                                               startActivity(intent);
+                                           } else {
+                                               Toast.makeText(Register.this, "Registration Failed! Please try again!", Toast.LENGTH_SHORT).show();
+                                           }
+                                       }
+                                   });
+                               }else{
+                                   Toast.makeText(Register.this, "Admin account already created!", Toast.LENGTH_LONG).show();
+                               }
 
-                            dataAdmin.child(FirebaseAuth.getInstance().getCurrentUser().getUid()).setValue(admin).addOnCompleteListener(new OnCompleteListener<Void>() {
-                                @Override
-                                public void onComplete(@NonNull Task<Void> task) {
-                                    if (task.isSuccessful()) {
-                                        Toast.makeText(Register.this, "Registration Complete!", Toast.LENGTH_SHORT).show();
-                                        { //use this as message below, vb
-                                        }
-                                        Intent intent = new Intent(getApplicationContext(), WelcomeScreenActivity.class);
-                                        intent.putExtra("role",accountType);
-                                        intent.putExtra("name",firstName);
-                                        finish(); //finish this activity before opening a new one
-                                        startActivity(intent);
-                                    } else {
-                                        Toast.makeText(Register.this, "Registration Failed! Please try again!", Toast.LENGTH_SHORT).show();
-                                    }
-                                }
-                            });
-                        }else{
-                            Toast.makeText(Register.this, "Admin account already created!", Toast.LENGTH_LONG).show();
-                        }
+                           }
+
+                           @Override
+                           public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                           }
+                       });
+
                     }
 
                     if(accountType.equals("ServiceProvider")){
