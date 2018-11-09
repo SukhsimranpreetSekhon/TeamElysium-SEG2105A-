@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ManageServices">
+
+    <EditText
+        android:id="@+id/edit_txt_ServiceName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:inputType="textPersonName"
+        android:textAlignment="center"
+        android:hint= "@string/enter_serviceName"/>
+
+    <EditText
+        android:id="@+id/edit_txt_ServicePrice"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/edit_txt_ServiceName"
+        android:ems="10"
+        android:textAlignment="center"
+        android:inputType="number"
+        android:hint = "@string/enter_servicePrice"/>
+
+    <LinearLayout
+        android:layout_below="@id/edit_txt_ServicePrice"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/btnAdd"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/edit_txt_ServicePrice"
+            android:layout_weight="1"
+            android:text="Add" />
+
+        <Button
+            android:id="@+id/btnDelete"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/edit_txt_ServicePrice"
+            android:layout_toRightOf="@id/btnAdd"
+            android:layout_weight="1"
+            android:text="Delete" />
+
+    </LinearLayout>
+
+</RelativeLayout>

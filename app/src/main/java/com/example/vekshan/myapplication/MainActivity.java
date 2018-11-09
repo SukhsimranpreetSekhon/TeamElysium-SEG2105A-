@@ -140,7 +140,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
                                             Intent intent;
                                             if (accountType.equals("Administrator")){
-                                                intent = new Intent(getApplicationContext(), AdminScreen.class);
+                                                intent = new Intent(getApplicationContext(), ManageServices.class);
                                             }else{ //HomeOwner or ServiceProvider
                                                 intent = new Intent(getApplicationContext(), WelcomeScreenActivity.class);
                                             }

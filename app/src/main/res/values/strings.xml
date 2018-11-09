@@ -12,6 +12,8 @@
     <string name="enter_phone">Phone Number</string>
     <string name="account_type">Account Type: </string>
     <string name="logo">logo</string>
+    <string name="enter_serviceName">Service Name</string>
+    <string name="enter_servicePrice">Price of Service</string>
     <string-array name="accountTypes">
         <item>HomeOwner</item>
         <item>ServiceProvider</item>
