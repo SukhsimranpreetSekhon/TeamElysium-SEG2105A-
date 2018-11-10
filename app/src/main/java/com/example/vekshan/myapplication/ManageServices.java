@@ -94,10 +94,10 @@ public class ManageServices extends AppCompatActivity implements View.OnClickLis
 
     }
 
-    private void showUpdateDialog(final String serviceId, String serviceName, double servicePrice){
+    private void showUpdateDialog(final String serviceId, final String serviceName, final double servicePrice){
         AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
         LayoutInflater layoutInflater = getLayoutInflater();
-        View dialogView = layoutInflater.inflate(R.layout.update_dialog,null);
+        final View dialogView = layoutInflater.inflate(R.layout.update_dialog,null);
         dialogBuilder.setView(dialogView);
 
         final EditText edit_txt_ServiceUpdatedName = dialogView.findViewById(R.id.edit_txt_ServiceUpdatedName);
@@ -106,7 +106,8 @@ public class ManageServices extends AppCompatActivity implements View.OnClickLis
         final Button btnUpdate = dialogView.findViewById(R.id.btnUpdate);
         final Button btnDelete = dialogView.findViewById(R.id.btnDelete);
 
-        dialogBuilder.setTitle(serviceName);
+        String title = new String(serviceName);
+        dialogBuilder.setTitle("Applying changes to: " + title);
         final AlertDialog alertDialog = dialogBuilder.create();
         alertDialog.show();
 
@@ -115,11 +116,16 @@ public class ManageServices extends AppCompatActivity implements View.OnClickLis
             public void onClick(View v) {
 
                 String name = edit_txt_ServiceUpdatedName.getText().toString().trim();
-                double price = Double.parseDouble(edit_txt_ServiceUpdatedPrice.getText().toString().trim());
+                String price_str = edit_txt_ServiceUpdatedPrice.getText().toString().trim();
+                double price = Double.parseDouble((price_str));
 
-                if (!TextUtils.isEmpty(name)) {
+                if (!TextUtils.isEmpty(name) && !TextUtils.isEmpty(price_str)) { //change both name and price
                     updateService(serviceId, name, price);
                     alertDialog.dismiss();
+                }else if (TextUtils.isEmpty(name) && !TextUtils.isEmpty(price_str)){ //change price only
+                    updateService(serviceId,serviceName,price);
+                }else {
+                    updateService(serviceId,serviceName, servicePrice);
                 }
 
 
@@ -144,11 +150,12 @@ public class ManageServices extends AppCompatActivity implements View.OnClickLis
     private void addService() {
 
         String serviceName = edit_txt_ServiceName.getText().toString().trim();
-        double servicePrice = Double.parseDouble(String.valueOf(edit_txt_ServicePrice.getText().toString()));
+        String servicePrice_str = edit_txt_ServicePrice.getText().toString().trim();
 
-        if (!TextUtils.isEmpty((serviceName))) {
+        if (!TextUtils.isEmpty(serviceName) && !TextUtils.isEmpty(servicePrice_str)) { //name field and price field are not empty
 
             String id = dataServices.push().getKey();
+            double servicePrice = Double.parseDouble((servicePrice_str));
 
             Service service = new Service(id, serviceName, servicePrice);
 
@@ -157,8 +164,7 @@ public class ManageServices extends AppCompatActivity implements View.OnClickLis
             Toast.makeText(this, "Service Added", Toast.LENGTH_LONG).show();
 
         } else {
-
-            Toast.makeText(this, "Please enter a service", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "Please enter a service and a price!", Toast.LENGTH_LONG).show();
         }
     }
 
