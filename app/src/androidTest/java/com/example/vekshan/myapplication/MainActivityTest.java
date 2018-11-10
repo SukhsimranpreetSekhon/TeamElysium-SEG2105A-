@@ -67,7 +67,7 @@ public class MainActivityTest {
         }
         */
 
-        button = myActivity.findViewById((R.id.btnLogIn));
+        button = myActivity.findViewById(R.id.btnLogIn);
 
         button.performClick();
 
@@ -103,6 +103,9 @@ public class MainActivityTest {
             Toast.makeText(myActivity,"login success", Toast.LENGTH_LONG).show();
         }
         */
+
+        button = myActivity.findViewById(R.id.btnLogIn);
+        button.performClick();
     }
 
     @Test
@@ -134,6 +137,8 @@ public class MainActivityTest {
             Toast.makeText(myActivity,"login success", Toast.LENGTH_LONG).show();
         }
         */
+        button = myActivity.findViewById(R.id.btnLogIn);
+        button.performClick();
     }
 
 
