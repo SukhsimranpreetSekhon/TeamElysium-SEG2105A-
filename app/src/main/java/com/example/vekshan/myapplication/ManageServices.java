@@ -1,10 +1,13 @@
 package com.example.vekshan.myapplication;
 
 import android.support.annotation.NonNull;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
@@ -24,7 +27,6 @@ public class ManageServices extends AppCompatActivity implements View.OnClickLis
     private EditText edit_txt_ServiceName;
     private EditText edit_txt_ServicePrice;
     private Button btnAdd;
-    private Button btnDelete;
     private DatabaseReference dataServices;
 
     private ListView listViewServices;
@@ -43,15 +45,23 @@ public class ManageServices extends AppCompatActivity implements View.OnClickLis
         edit_txt_ServiceName = findViewById(R.id.edit_txt_ServiceName);
         edit_txt_ServicePrice = findViewById(R.id.edit_txt_ServicePrice);
         btnAdd = findViewById(R.id.btnAdd);
-        btnDelete = findViewById(R.id.btnDelete);
 
         //Setting Button Listeners
         btnAdd.setOnClickListener(this);
-        btnDelete.setOnClickListener(this);
 
         //Creating List for Services
         listViewServices = findViewById(R.id.servicesList);
         serviceList = new ArrayList<>();
+
+        listViewServices.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+                Service service = serviceList.get(position);
+                showUpdateDialog(service.getServiceId(), service.getServiceName(),service.getServicePrice());
+                return true;
+
+            }
+        });
     }
 
     @Override
@@ -61,19 +71,73 @@ public class ManageServices extends AppCompatActivity implements View.OnClickLis
 
             addService();
 
-        } else if (view == btnDelete){
-
-            //deleteService();
-
         }
 
     }
 
-    private void updateService(String id, String name, double price){
+    private void updateService(String serviceId, String serviceName, double servicePrice){
+        DatabaseReference data = dataServices.child(serviceId);
+
+        Service service = new Service(serviceId,serviceName,servicePrice);
+        data.setValue(service);
+
+        Toast.makeText(getApplicationContext(), "Update Successful!", Toast.LENGTH_LONG).show();
 
     }
 
-    private void deleteService(String id){
+    private void deleteService(String serviceId){
+        DatabaseReference data = dataServices.child(serviceId);
+
+        data.removeValue();
+
+        Toast.makeText(getApplicationContext(), "Deletion Successful!", Toast.LENGTH_LONG).show();
+
+    }
+
+    private void showUpdateDialog(final String serviceId, String serviceName, double servicePrice){
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
+        LayoutInflater layoutInflater = getLayoutInflater();
+        View dialogView = layoutInflater.inflate(R.layout.update_dialog,null);
+        dialogBuilder.setView(dialogView);
+
+        final EditText edit_txt_ServiceUpdatedName = dialogView.findViewById(R.id.edit_txt_ServiceUpdatedName);
+        final EditText edit_txt_ServiceUpdatedPrice = dialogView.findViewById(R.id.edit_txt_ServiceUpdatedPrice);
+
+        final Button btnUpdate = dialogView.findViewById(R.id.btnUpdate);
+        final Button btnDelete = dialogView.findViewById(R.id.btnDelete);
+
+        dialogBuilder.setTitle(serviceName);
+        final AlertDialog alertDialog = dialogBuilder.create();
+        alertDialog.show();
+
+        btnUpdate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                String name = edit_txt_ServiceUpdatedName.getText().toString().trim();
+                double price = Double.parseDouble(edit_txt_ServiceUpdatedPrice.getText().toString().trim());
+
+                if (!TextUtils.isEmpty(name)) {
+                    updateService(serviceId, name, price);
+                    alertDialog.dismiss();
+                }
+
+
+            }
+
+
+        });
+
+        btnDelete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                deleteService(serviceId);
+                alertDialog.dismiss();
+            }
+        });
+
+
 
     }
 
@@ -89,9 +153,6 @@ public class ManageServices extends AppCompatActivity implements View.OnClickLis
             Service service = new Service(id, serviceName, servicePrice);
 
             dataServices.child(id).setValue(service);
-
-            //edit_txt_ServiceName.setText("");
-            //edit_txt_ServicePrice.setText("");
 
             Toast.makeText(this, "Service Added", Toast.LENGTH_LONG).show();
 
