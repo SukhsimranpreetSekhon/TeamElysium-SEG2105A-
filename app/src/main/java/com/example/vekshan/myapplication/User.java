@@ -16,7 +16,21 @@ public class User {
             this.phoneNumber = phoneNumber;
         }
 
-
+    public String getFirstName() {
+        return firstName;
     }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+}
 
 
