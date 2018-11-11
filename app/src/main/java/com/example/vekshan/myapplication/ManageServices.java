@@ -94,6 +94,7 @@ public class ManageServices extends AppCompatActivity implements View.OnClickLis
 
     }
 
+    //based on lab 5
     private void showUpdateDialog(final String serviceId, final String serviceName, final double servicePrice){
         AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
         LayoutInflater layoutInflater = getLayoutInflater();
