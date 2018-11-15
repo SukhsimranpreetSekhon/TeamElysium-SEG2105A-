@@ -28,7 +28,7 @@ import com.google.firebase.database.ValueEventListener;
 import org.w3c.dom.Text;
 
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener{
+public class MainActivity extends AppCompatActivity {
 
     private Button btnLogIn;
     private EditText edit_txt_Email;
@@ -63,30 +63,24 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         spinnerChoice.setAdapter(adapter);
 
         //Setting listeners
-        btnLogIn.setOnClickListener(this);
-        txt_view_Register.setOnClickListener(this);
-
-
-
-
-
-
-
-    }
-
-    @Override
-    public void onClick(View view){
-        if (view == btnLogIn){
-            //call login method
-            login();
-        }
-        if (view == txt_view_Register) {
-            //open RegisterActivity which is the signup screen
-            startActivity(new Intent(this, Register.class));
-        }
+        btnLogIn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //call login method
+                login();
+            }
+        });
+        txt_view_Register.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //open RegisterActivity which is the signup screen
+                startActivity(new Intent(v.getContext(), Register.class));
+            }
+        });
 
 
     }
+
 
     private void loginFailed(){
         Toast.makeText(MainActivity.this,"Log in Failed! Please try again!", Toast.LENGTH_SHORT).show();
@@ -141,7 +135,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                                             Intent intent;
                                             if (accountType.equals("Administrator")){
                                                 intent = new Intent(getApplicationContext(), ManageServices.class);
-                                            }else{ //HomeOwner or ServiceProvider
+                                            }else if(accountType.equals("ServiceProvider")){ //HomeOwner or ServiceProvider
+                                                intent = new Intent(getApplicationContext(), ProviderScreen.class);
+                                            }else{
                                                 intent = new Intent(getApplicationContext(), WelcomeScreenActivity.class);
                                             }
 

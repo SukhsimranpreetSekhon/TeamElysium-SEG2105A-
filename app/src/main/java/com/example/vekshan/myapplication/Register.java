@@ -30,7 +30,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 
-public class Register extends AppCompatActivity implements View.OnClickListener{
+public class Register extends AppCompatActivity{
     private TextView txt_view_Login;
     private Button btnRegister;
     private EditText edit_txt_Email;
@@ -44,8 +44,7 @@ public class Register extends AppCompatActivity implements View.OnClickListener{
     private DatabaseReference dataAdmin;
     private DatabaseReference dataHomeOwner;
     private DatabaseReference dataServiceProvider;
-    private Boolean hasAdmin;
-    //private String accountType;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,8 +55,6 @@ public class Register extends AppCompatActivity implements View.OnClickListener{
         dataAdmin = FirebaseDatabase.getInstance().getReference("Administrator");
         dataHomeOwner = FirebaseDatabase.getInstance().getReference("HomeOwner");
         dataServiceProvider=FirebaseDatabase.getInstance().getReference("ServiceProvider");
-
-        hasAdmin =false;
 
         //Intializing views
         btnRegister = findViewById(R.id.btnRegister);
@@ -76,32 +73,24 @@ public class Register extends AppCompatActivity implements View.OnClickListener{
         spinnerChoice.setAdapter(adapter);
 
         //Setting listeners
-        btnRegister.setOnClickListener(this);
-    //    spinnerChoice.setOnItemSelectedListener(this);
-        txt_view_Login.setOnClickListener(this);
+        btnRegister.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //call method register
+                register();
+            }
+        });
+
+        txt_view_Login.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //open the MainActivity which is the log in screen
+                startActivity(new Intent(v.getContext(), MainActivity.class));
+            }
+        });
 
     }
 
-    @Override
-    protected void onStart() {
-        super.onStart();
-
-        if(firebaseAuth.getCurrentUser() != null){
-
-        }
-    }
-
-    @Override
-    public void onClick(View view) {
-        if (view == btnRegister){
-            //call method register
-            register();
-        }
-        if (view == txt_view_Login) {
-            //open the MainActivity which is the log in screen
-            startActivity(new Intent(this, MainActivity.class));
-        }
-    }
 
     private void register() {
         final String email = edit_txt_Email.getText().toString().trim();
@@ -113,7 +102,7 @@ public class Register extends AppCompatActivity implements View.OnClickListener{
 
 
       if(TextUtils.isEmpty(email)){
-            Toast.makeText(this, "Email field cannot be empty!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(Register.this, "Email field cannot be empty!", Toast.LENGTH_SHORT).show();
             return;
         }
 
@@ -124,26 +113,26 @@ public class Register extends AppCompatActivity implements View.OnClickListener{
         }
 
         if(TextUtils.isEmpty(password)){
-            Toast.makeText(this, "Password field cannot be empty!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(Register.this, "Password field cannot be empty!", Toast.LENGTH_SHORT).show();
             return;
         }
 
-        if(password.length()<6){
-            edit_txt_Password.setError("Minimum length of password should be 6");
+        if(password.length()<8){
+            edit_txt_Password.setError("Minimum length of password should be 8");
         }
 
         if(TextUtils.isEmpty(firstName)){
-            Toast.makeText(this, "First Name field cannot be empty!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(Register.this, "First Name field cannot be empty!", Toast.LENGTH_SHORT).show();
             return;
         }
 
         if(TextUtils.isEmpty(lastName)){
-            Toast.makeText(this, "Last Name field cannot be empty!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(Register.this, "Last Name field cannot be empty!", Toast.LENGTH_SHORT).show();
             return;
         }
 
         if(TextUtils.isEmpty(phoneNumber)){
-            Toast.makeText(this, "Phone Number field cannot be empty!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(Register.this, "Phone Number field cannot be empty!", Toast.LENGTH_SHORT).show();
             return;
         }
 
@@ -240,62 +229,12 @@ public class Register extends AppCompatActivity implements View.OnClickListener{
 
 
                 }else{
-                    Toast.makeText(Register.this,task.getException().getMessage(),Toast.LENGTH_LONG).show(); //do not change my code just ammend it,vb
+                    Toast.makeText(Register.this,"Registration Failed! Please try again!",Toast.LENGTH_LONG).show();
                 }
             }
         });
 
- /*       firebaseAuth.createUserWithEmailAndPassword(email,password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-            @Override
-            public void onComplete(@NonNull Task<AuthResult> task) {
-                if(task.isSuccessful()){
-                    Toast.makeText(getApplicationContext(),"User Register Success", Toast.LENGTH_SHORT).show();
-                }
-            }
-        });
 
-        firebaseAuth.createUserWithEmailAndPassword(email,password).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-            @Override
-            public void onComplete(@NonNull Task<AuthResult> task) {
-                if (task.isSuccessful()){
-                    if(accountType.equals("Administrator")){
-                        Administrator admin = new Administrator(firstName, lastName, email, phoneNumber);
-
-                        dataAdmin.child(FirebaseAuth.getInstance().getUid()).setValue(admin).addOnCompleteListener(this, new OnCompleteListener<Void>() {
-                            @Override
-                            public void onComplete(@NonNull Task<Void> task) {
-
-                            }
-
-                        } {
-
-                        });
-
-                    }
-                    Toast.makeText(Register.this,"Registration Complete!", Toast.LENGTH_SHORT).show();
-                    finish(); //finish this activity before opening a new one
-                    //open the Welcome screen
-                    startActivity(new Intent(getApplicationContext(), WelcomeScreenActivity.class));
-                }else{
-                    Toast.makeText(Register.this,"Registration Failed! Please try again!", Toast.LENGTH_SHORT).show();
-                }
-            }
-        });
-
-    }
-
-    @Override
-    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-        accountType = spinnerChoice.getSelectedItem().toString();
-
-
-
-    }
-
-    @Override
-    public void onNothingSelected(AdapterView<?> parent) {
-        Toast.makeText(this,"Please select account type",Toast.LENGTH_SHORT).show();
-    */
     }
 
 }

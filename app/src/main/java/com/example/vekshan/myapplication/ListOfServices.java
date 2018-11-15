@@ -1,6 +1,7 @@
 package com.example.vekshan.myapplication;
 
 import android.app.Activity;
+import android.content.Context;
 import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,12 +12,12 @@ import android.widget.TextView;
 import java.util.List;
 
 public class ListOfServices extends ArrayAdapter<Service> {
-    private Activity context;
+    private Activity activity;
     List<Service> services;
 
     public ListOfServices(Activity context, List<Service> services){
         super(context, R.layout.layout_service_list, services);
-        this.context = context;
+        this.activity = context;
         this.services = services;
     }
 
@@ -24,20 +25,20 @@ public class ListOfServices extends ArrayAdapter<Service> {
     @NonNull
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        LayoutInflater layoutInflater = context.getLayoutInflater();
+        LayoutInflater layoutInflater = activity.getLayoutInflater();
 
-        View listItem = layoutInflater.inflate(R.layout.layout_service_list, null, true);
+        View view = layoutInflater.inflate(R.layout.layout_service_list, null, true);
 
 
-        TextView textViewServiceName = listItem.findViewById(R.id.txt_view_ServiceName);
-        TextView textViewServicePrice = listItem.findViewById(R.id.txt_view_ServicePrice);
+        TextView txt_view_ServiceName = view.findViewById(R.id.txt_view_ServiceName);
+        TextView txt_view_ServicePrice = view.findViewById(R.id.txt_view_ServicePrice);
 
         Service service = services.get(position);
 
-        textViewServiceName.setText(service.getServiceName());
-        textViewServicePrice.setText(String.valueOf(service.getServicePrice()));
+        txt_view_ServiceName.setText(service.getServiceName());
+        txt_view_ServicePrice.setText(String.valueOf(service.getServicePrice()));
 
-        return listItem;
+        return view;
     }
 
 }

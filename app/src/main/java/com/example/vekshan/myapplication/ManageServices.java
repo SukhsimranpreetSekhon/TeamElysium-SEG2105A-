@@ -57,7 +57,7 @@ public class ManageServices extends AppCompatActivity implements View.OnClickLis
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
                 Service service = serviceList.get(position);
-                showUpdateDialog(service.getServiceId(), service.getServiceName(),service.getServicePrice());
+                openServiceDialog(service.getServiceId(), service.getServiceName(),service.getServicePrice());
                 return true;
 
             }
@@ -95,22 +95,24 @@ public class ManageServices extends AppCompatActivity implements View.OnClickLis
     }
 
     //based on lab 5
-    private void showUpdateDialog(final String serviceId, final String serviceName, final double servicePrice){
-        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
+    private void openServiceDialog(final String serviceId, final String serviceName, final double servicePrice){
+
         LayoutInflater layoutInflater = getLayoutInflater();
-        final View dialogView = layoutInflater.inflate(R.layout.update_dialog,null);
-        dialogBuilder.setView(dialogView);
+        View view   = layoutInflater.inflate(R.layout.update_dialog,null);
 
-        final EditText edit_txt_ServiceUpdatedName = dialogView.findViewById(R.id.edit_txt_ServiceUpdatedName);
-        final EditText edit_txt_ServiceUpdatedPrice = dialogView.findViewById(R.id.edit_txt_ServiceUpdatedPrice);
+        final AlertDialog serviceDialog =new AlertDialog.Builder(this).create();
+        serviceDialog.setView(view);
+        serviceDialog.setTitle("Applying changes to: " + serviceName);
+        serviceDialog.show();
 
-        final Button btnUpdate = dialogView.findViewById(R.id.btnUpdate);
-        final Button btnDelete = dialogView.findViewById(R.id.btnDelete);
+        final EditText edit_txt_ServiceUpdatedName = view.findViewById(R.id.edit_txt_ServiceUpdatedName);
+        final EditText edit_txt_ServiceUpdatedPrice = view.findViewById(R.id.edit_txt_ServiceUpdatedPrice);
 
-        String title = new String(serviceName);
-        dialogBuilder.setTitle("Applying changes to: " + title);
-        final AlertDialog alertDialog = dialogBuilder.create();
-        alertDialog.show();
+        final Button btnUpdate = view.findViewById(R.id.btnUpdate);
+        final Button btnDelete = view.findViewById(R.id.btnDelete);
+        
+
+
 
         btnUpdate.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -122,11 +124,13 @@ public class ManageServices extends AppCompatActivity implements View.OnClickLis
 
                 if (!TextUtils.isEmpty(name) && !TextUtils.isEmpty(price_str)) { //change both name and price
                     updateService(serviceId, name, price);
-                    alertDialog.dismiss();
+                    serviceDialog.dismiss();
                 }else if (TextUtils.isEmpty(name) && !TextUtils.isEmpty(price_str)){ //change price only
                     updateService(serviceId,serviceName,price);
+                    serviceDialog.dismiss();
                 }else {
                     updateService(serviceId,serviceName, servicePrice);
+                    serviceDialog.dismiss();
                 }
 
 
@@ -140,7 +144,7 @@ public class ManageServices extends AppCompatActivity implements View.OnClickLis
             public void onClick(View v) {
 
                 deleteService(serviceId);
-                alertDialog.dismiss();
+                serviceDialog.dismiss();
             }
         });
 
