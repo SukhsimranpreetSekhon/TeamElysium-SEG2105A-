@@ -15,6 +15,7 @@ import android.widget.CompoundButton;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -42,6 +43,7 @@ public class AddServices extends AppCompatActivity {
             this.services = services;
         }
 
+
         @NonNull
         @Override
         public View getView(int position, View convertView, @NonNull ViewGroup parent) {
@@ -52,16 +54,35 @@ public class AddServices extends AppCompatActivity {
 
 
             TextView textViewServiceName = view.findViewById(R.id.txt_view_ServiceName);
-            CheckBox checkBox = view.findViewById(R.id.check_Service);
+            TextView textViewServicePrice = view.findViewById(R.id.txt_view_ServicePrice);
+            final CheckBox checkBox = view.findViewById(R.id.check_Service);
 
             final Service service = services.get(position);
             textViewServiceName.setText(service.getServiceName());
+            textViewServicePrice.setText(" - $" + String.valueOf(service.getServicePrice()));
+
+            dataServiceProv.child(service.getServiceId()).addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    if(dataSnapshot.exists()){
+                        checkBox.setChecked(true);
+                    }
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                }
+            });
+
 
             checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                     if(isChecked){
-                        dataServiceProv.child("Services").setValue(service.getServiceId()); //put id of serviceprov as first child
+                        dataServiceProv.child(service.getServiceId()).setValue(service);
+                    } else{
+                        dataServiceProv.child(service.getServiceId()).removeValue();
                     }
                 }
             });
@@ -76,8 +97,9 @@ public class AddServices extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_services);
 
+        final String id = FirebaseAuth.getInstance().getCurrentUser().getUid();
         dataServices = FirebaseDatabase.getInstance().getReference("Service");
-        dataServiceProv = FirebaseDatabase.getInstance().getReference("ServiceProvider");
+        dataServiceProv = FirebaseDatabase.getInstance().getReference("ServiceProvider").child(id).child("Services");
 
         //Creating List for Services
         listViewServices = findViewById(R.id.servicesChecklist);
@@ -89,14 +111,14 @@ public class AddServices extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
 
-        dataServices.addValueEventListener(new ValueEventListener() {
+        dataServices.orderByChild("serviceName").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
                 serviceList.clear();
 
                 for(DataSnapshot serviceSnapshot: dataSnapshot.getChildren()){
-                    Service service = serviceSnapshot.getValue(Service.class);
+                    final Service service = serviceSnapshot.getValue(Service.class);
 
                     serviceList.add(service);
 
@@ -105,6 +127,7 @@ public class AddServices extends AppCompatActivity {
                 CheckListOfServices servicesListAdapter = new CheckListOfServices(AddServices.this, serviceList);
                 listViewServices.setAdapter(servicesListAdapter);
 
+
             }
 
             @Override
@@ -112,5 +135,6 @@ public class AddServices extends AppCompatActivity {
 
             }
         });
+
     }
 }

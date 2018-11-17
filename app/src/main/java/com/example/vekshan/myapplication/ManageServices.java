@@ -98,7 +98,7 @@ public class ManageServices extends AppCompatActivity implements View.OnClickLis
     private void openServiceDialog(final String serviceId, final String serviceName, final double servicePrice){
 
         LayoutInflater layoutInflater = getLayoutInflater();
-        View view   = layoutInflater.inflate(R.layout.update_dialog,null);
+        View view   = layoutInflater.inflate(R.layout.service_dialog,null);
 
         final AlertDialog serviceDialog =new AlertDialog.Builder(this).create();
         serviceDialog.setView(view);
@@ -177,7 +177,7 @@ public class ManageServices extends AppCompatActivity implements View.OnClickLis
     protected void onStart() {
         super.onStart();
 
-        dataServices.addValueEventListener(new ValueEventListener() {
+        dataServices.orderByChild("serviceName").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 

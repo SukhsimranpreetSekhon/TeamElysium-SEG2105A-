@@ -13,6 +13,13 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text=""/>
-
+    <Space
+        android:layout_width="5dp"
+        android:layout_height="1dp" />
+    <TextView
+        android:id="@+id/txt_view_ServicePrice"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text=""/>
 
 </LinearLayout>

@@ -38,6 +38,9 @@ public class MainActivity extends AppCompatActivity {
     private Spinner spinnerChoice;
     private ArrayAdapter<CharSequence> adapter;
     private DatabaseReference data;
+    private ValueEventListener listener1;
+    private ValueEventListener listener2;
+
 
 
 
@@ -47,6 +50,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         firebaseAuth = FirebaseAuth.getInstance();
+
 
         //Intializing views
         btnLogIn = findViewById(R.id.btnLogIn);
@@ -122,12 +126,12 @@ public class MainActivity extends AppCompatActivity {
                     data = FirebaseDatabase.getInstance().getReference().child(accountType).child(FirebaseAuth.getInstance().getCurrentUser().getUid());
 
                     //implement code to see required login screen
-                    data.addValueEventListener(new ValueEventListener() {
+                  listener1 = data.addValueEventListener(new ValueEventListener() {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                             if (dataSnapshot.exists()) {
                                     Toast.makeText(MainActivity.this,"Successfully logged in!", Toast.LENGTH_SHORT).show();
-                                    data.child("firstName").addValueEventListener(new ValueEventListener() {
+                                  listener2 = data.child("firstName").addValueEventListener(new ValueEventListener() {
                                         @Override
                                         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                                             String firstName = dataSnapshot.getValue(String.class);
@@ -145,6 +149,7 @@ public class MainActivity extends AppCompatActivity {
                                             intent.putExtra("name",firstName);
                                             finish(); //finish this activity before opening a new one
                                             startActivity(intent);
+
                                         }
 
                                         @Override
@@ -172,5 +177,10 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-
+    @Override
+    protected void onStop() {
+        super.onStop();
+        data.removeEventListener(listener1);
+        data.removeEventListener(listener2);
+    }
 }

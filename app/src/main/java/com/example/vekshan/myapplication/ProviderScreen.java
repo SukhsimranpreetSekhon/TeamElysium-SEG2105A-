@@ -39,9 +39,11 @@ public class ProviderScreen extends AppCompatActivity implements View.OnClickLis
     public void onClick(View v) {
         if(v == btnLogout) {
             startActivity(new Intent(this, MainActivity.class));
+            finish();
         }
         if(v== btnAddServices) {
             startActivity(new Intent(this, AddServices.class));
+            finish();
         }
 
     }
