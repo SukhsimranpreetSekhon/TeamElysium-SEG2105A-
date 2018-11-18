@@ -13,6 +13,8 @@ public class ProviderScreen extends AppCompatActivity implements View.OnClickLis
     private String name;
     private Button btnAddServices;
     private Button btnLogout;
+    private Button btnServicesAvailability;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -20,9 +22,11 @@ public class ProviderScreen extends AppCompatActivity implements View.OnClickLis
 
         btnLogout = findViewById(R.id.btnLogout);
         btnAddServices =findViewById(R.id.btnAddServices);
+        btnServicesAvailability = findViewById(R.id.btnServicesAvailability);
         //Setting listeners
         btnLogout.setOnClickListener(this);
         btnAddServices.setOnClickListener(this);
+        btnServicesAvailability.setOnClickListener(this);
 
         txt_view_Role = findViewById(R.id.txt_view_Role);
         Intent intent = getIntent();
@@ -43,6 +47,10 @@ public class ProviderScreen extends AppCompatActivity implements View.OnClickLis
         }
         if(v== btnAddServices) {
             startActivity(new Intent(this, AddServices.class));
+            finish();
+        }
+        if (v == btnServicesAvailability){
+            startActivity(new Intent(this, AddAvailability.class));
             finish();
         }
 

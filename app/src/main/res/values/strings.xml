@@ -32,4 +32,29 @@
     <string name="permission_rationale">"Contacts permissions are needed for providing email
         completions."
     </string>
+    <string name="add_services">Add Services</string>
+    <string name="services_availability">Services Availability</string>
+    <string name="txt_view_welcome">Welcome to the application!</string>
+    <string name="complete_profile">Complete Profile</string>
+    <string-array name="weekdays">
+        <item>Monday</item>
+        <item>Tuesday</item>
+        <item>Wednesday</item>
+        <item>Thursday</item>
+        <item>Friday</item>
+        <item>Saturday</item>
+        <item>Sunday</item>
+    </string-array>
+    <string name="btn_save">Save</string>
+    <string-array name="time_slots">
+        <item>8:00 &#8211; 10:00</item>
+        <item>10:00 &#8211; 12:00</item>
+        <item>12:00 &#8211; 14:00</item>
+        <item>14:00 &#8211; 16:00</item>
+        <item>16:00 &#8211; 18:00</item>
+        <item>18:00 &#8211; 20:00</item>
+    </string-array>
+    <string name="weekdayChoice">Choose a weekday:</string>
+    <string name="timeSlotChoice">Choose a time slot:</string>
+    <string name="txt_view_listOfAvailability">List of Availability:</string>
 </resources>

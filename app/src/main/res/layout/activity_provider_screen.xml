@@ -32,10 +32,23 @@
             android:gravity="center" />
 
         <Button
+            android:id="@+id/btnCompleteProfile"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/complete_profile"/>
+
+
+        <Button
             android:id="@+id/btnAddServices"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Add Services" />
+            android:text="@string/add_services" />
+
+        <Button
+            android:id="@+id/btnServicesAvailability"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/services_availability" />
 
         <Button
             android:id="@+id/btnLogout"
