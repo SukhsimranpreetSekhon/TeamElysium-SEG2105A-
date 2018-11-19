@@ -57,4 +57,6 @@
     <string name="weekdayChoice">Choose a weekday:</string>
     <string name="timeSlotChoice">Choose a time slot:</string>
     <string name="txt_view_listOfAvailability">List of Availability:</string>
+    <string name="btn_Update">Update</string>
+    <string name="btn_Delete">Delete</string>
 </resources>

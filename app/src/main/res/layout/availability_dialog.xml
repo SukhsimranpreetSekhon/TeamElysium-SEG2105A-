@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="match_parent">
+    <TextView
+        android:id="@+id/txt_view_AvailabilityInfo"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:textSize="24sp"
+        android:gravity="center"
+        android:text=""/>
+    <TextView
+        android:id="@+id/txt_view_timeslotChoice"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:textSize="24sp"
+        android:gravity="center"
+        android:text="@string/timeSlotChoice"
+        android:layout_below="@id/txt_view_AvailabilityInfo"/>
+
+    <Spinner
+        android:id="@+id/spinnertimeslot"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:textAlignment="center"
+        android:entries="@array/time_slots"
+        android:layout_below="@id/txt_view_timeslotChoice"/>
+
+    <Button
+        android:id="@+id/btnUpdate"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:textAlignment="center"
+        android:text="@string/btn_Update"
+        android:layout_below="@id/spinnertimeslot"
+        />
+    <Button
+        android:id="@+id/btnDelete"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/btnUpdate"
+        android:text="@string/btn_Delete" />
+
+
+</RelativeLayout>

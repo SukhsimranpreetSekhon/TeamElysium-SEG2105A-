@@ -26,11 +26,11 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/edit_txt_ServiceUpdatedPrice"
-        android:text="Update" />
+        android:text="@string/btn_Update" />
     <Button
         android:id="@+id/btnDelete"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/btnUpdate"
-        android:text="Delete" />
+        android:text="@string/btn_Delete" />
 </RelativeLayout>

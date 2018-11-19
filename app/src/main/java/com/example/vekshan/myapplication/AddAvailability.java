@@ -1,9 +1,12 @@
 package com.example.vekshan.myapplication;
 
 import android.support.annotation.NonNull;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
@@ -84,14 +87,14 @@ public class AddAvailability extends AppCompatActivity {
         //Reference to database
         dataServiceProv = FirebaseDatabase.getInstance().getReference("ServiceProvider").child(id).child("Availabilities");
 
-        /*listViewAvailability.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+        listViewAvailability.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
                 Availability availability =  availaibilityList.get((position));
-                //openDialog
+                openAvailabilityDialog(availability.getId(),availability.getDay(),availability.getTimeslot());
                 return true;
             }
-        });*/
+        });
     }
 
    @Override
@@ -127,6 +130,63 @@ public class AddAvailability extends AppCompatActivity {
 
     }
 
+    public void openAvailabilityDialog(final String id, final String day, final String timeslot){
+        LayoutInflater layoutInflater = getLayoutInflater();
+        View view   = layoutInflater.inflate(R.layout.availability_dialog,null);
+        final AlertDialog availabilityDialog =new AlertDialog.Builder(this).create();
+        availabilityDialog.setView(view);
+        availabilityDialog.setTitle("Applying changes to: " + day + "-" + timeslot);
+        availabilityDialog.show();
+
+        final Spinner spinner = view.findViewById(R.id.spinnertimeslot);
+        spinner.setAdapter(adapterTimeSlots);
+
+        final Button btnUpdate = view.findViewById(R.id.btnUpdate);
+        final Button btnDelete = view.findViewById(R.id.btnDelete);
+
+        btnUpdate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                    String timeslot = spinner.getSelectedItem().toString().trim();
+                    updateAvailability(id, timeslot);
+                    availabilityDialog.dismiss();
+            }
+        });
+
+        btnDelete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                deleteAvailability(id);
+                availabilityDialog.dismiss();
+            }
+        });
+
+
+
+    }
+
+    public void updateAvailability(final String id, final String timeslot){
+        DatabaseReference data = dataServiceProv.child(id);
+        data.child("timeslot").setValue(timeslot).addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                if(task.isSuccessful()){
+                    Toast.makeText(getApplicationContext(), "Update Successful!", Toast.LENGTH_LONG).show();
+                }else{
+                    Toast.makeText(getApplicationContext(), "Could not write to database", Toast.LENGTH_LONG).show();
+                }
+            }
+        });
+
+
+    }
+
+    public void deleteAvailability(String id){
+        DatabaseReference data = dataServiceProv.child(id);
+        data.removeValue();
+        Toast.makeText(getApplicationContext(), "Deletion Successful!", Toast.LENGTH_LONG).show();
+
+    }
 
     public void addAvailability(){
 
@@ -134,7 +194,7 @@ public class AddAvailability extends AppCompatActivity {
         String timeslot = spinnerTimeSlots.getSelectedItem().toString().trim();
 
         String id = dataServiceProv.push().getKey();
-        Availability availability = new Availability(dayOfTheWeek, timeslot);
+        Availability availability = new Availability(id, dayOfTheWeek, timeslot);
 
         dataServiceProv.child(id).setValue(availability).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
