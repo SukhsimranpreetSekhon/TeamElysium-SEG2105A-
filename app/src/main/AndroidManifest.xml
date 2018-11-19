@@ -29,7 +29,8 @@
         <activity android:name=".ManageServices" />
         <activity android:name=".AddServices" />
         <activity android:name=".ProviderScreen" />
-        <activity android:name=".AddAvailability"></activity>
+        <activity android:name=".AddAvailability" />
+        <activity android:name=".CompleteProviderProfile"></activity>
     </application>
 
 </manifest>

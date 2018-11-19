@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".CompleteProviderProfile">
+
+    <TextView
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:textSize="18sp"
+        android:text="@string/info"
+        android:gravity="center"
+        android:id="@+id/text_view_info"/>
+
+    <LinearLayout
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:id="@+id/layout1"
+        android:layout_below="@id/text_view_info"
+        android:orientation="horizontal">
+
+        <EditText
+            android:layout_height="wrap_content"
+            android:layout_width="0dp"
+            android:gravity="center"
+            android:id="@+id/enter_buildingNum"
+            android:inputType="textPostalAddress"
+            android:hint="@string/enter_building_num"
+            android:ems="10"
+            android:layout_weight="1"/>
+
+        <EditText
+            android:layout_height="wrap_content"
+            android:layout_width="0dp"
+            android:gravity="center"
+            android:id="@+id/enter_streetName"
+            android:inputType="textPostalAddress"
+            android:hint="@string/enter_street_name"
+            android:ems="10"
+            android:layout_weight="4"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:id="@+id/layout2"
+        android:layout_below="@id/layout1"
+        android:orientation="horizontal">
+
+        <EditText
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:gravity="center"
+            android:id="@+id/enter_city"
+            android:inputType="textPersonName"
+            android:hint="@string/enter_city"
+            android:ems="10"
+            android:layout_weight="1"/>
+
+        <EditText
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:gravity="center"
+            android:id="@+id/enter_postalCode"
+            android:inputType="textPostalAddress"
+            android:hint="@string/enter_postalCode"
+            android:ems="10" android:layout_weight="1"/>
+
+    </LinearLayout>
+
+    <TextView
+        android:layout_height="30dp"
+        android:layout_width="match_parent"
+        android:text="Province"
+        android:gravity="center"
+        android:id="@+id/text_view_province"
+        android:layout_below="@id/layout2"/>
+
+    <Spinner
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:gravity="center"
+        android:id="@+id/spinnerProvince"
+        android:layout_below="@id/text_view_province"
+        android:entries="@array/provinces"
+        android:textAlignment="center"/>
+
+    <EditText
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:gravity="center"
+        android:id="@+id/enter_CompanyName"
+        android:layout_below="@id/spinnerProvince"
+        android:inputType="textPersonName"
+        android:hint="@string/enter_company_name"
+        android:ems="10"/>
+
+    <CheckBox
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:text="@string/checkBox_license"
+        android:id="@+id/checkBox_Licensed"
+        android:layout_below="@id/enter_CompanyName"
+        android:layoutDirection="rtl"/>
+
+    <EditText
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:gravity="center"
+        android:id="@+id/enter_generalDescription"
+        android:layout_below="@id/checkBox_Licensed"
+        android:inputType="textMultiLine"
+        android:hint="@string/edit_general_info"
+        android:ems="10"/>
+
+    <Button
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:text="@string/btn_add_info"
+        android:id="@+id/btn_AddInfo"
+        android:layout_below="@id/enter_generalDescription"/>
+
+</RelativeLayout>

@@ -14,6 +14,7 @@ public class ProviderScreen extends AppCompatActivity implements View.OnClickLis
     private Button btnAddServices;
     private Button btnLogout;
     private Button btnServicesAvailability;
+    private Button btnCompleteProfile;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,10 +24,12 @@ public class ProviderScreen extends AppCompatActivity implements View.OnClickLis
         btnLogout = findViewById(R.id.btnLogout);
         btnAddServices =findViewById(R.id.btnAddServices);
         btnServicesAvailability = findViewById(R.id.btnServicesAvailability);
+        btnCompleteProfile = findViewById(R.id.btnCompleteProfile);
         //Setting listeners
         btnLogout.setOnClickListener(this);
         btnAddServices.setOnClickListener(this);
         btnServicesAvailability.setOnClickListener(this);
+        btnCompleteProfile.setOnClickListener(this);
 
         txt_view_Role = findViewById(R.id.txt_view_Role);
         Intent intent = getIntent();
@@ -53,6 +56,12 @@ public class ProviderScreen extends AppCompatActivity implements View.OnClickLis
             startActivity(new Intent(this, AddAvailability.class));
             finish();
         }
+
+        if (v == btnCompleteProfile){
+            startActivity(new Intent(this, CompleteProviderProfile.class));
+            //finish();
+        }
+
 
     }
 }

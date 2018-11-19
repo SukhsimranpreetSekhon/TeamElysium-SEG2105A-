@@ -59,4 +59,52 @@
     <string name="txt_view_listOfAvailability">List of Availability:</string>
     <string name="btn_Update">Update</string>
     <string name="btn_Delete">Delete</string>
+    <string name="enter_building_num">#</string>
+
+    <string name="enter_street_name">Street Name</string>
+
+    <string name="enter_city">City</string>
+
+
+    -<string-array name="provinces">
+
+    <item>Alberta</item>
+
+    <item>British Columbia</item>
+
+    <item>Ontario</item>
+
+    <item>Quebec</item>
+
+    <item>Manitoba</item>
+
+    <item>New Brunswick</item>
+
+    <item>Newfoundland and Labrador</item>
+
+    <item>Northwest Territories</item>
+
+    <item>Nova Scotia</item>
+
+    <item>Nunavut</item>
+
+    <item>Prince Edward Island</item>
+
+    <item>Saskatchewan</item>
+
+    <item>Yukon</item>
+
+</string-array>
+
+    <string name="enter_postalCode">Postal Code</string>
+
+    <string name="enter_company_name">Company Name</string>
+
+    <string name="edit_general_info">General Description</string>
+
+    <string name="checkBox_license">Check if licensed service</string>
+
+    <string name="btn_add_info">Add Info</string>
+
+    <string name="info">Type Information Here</string>
 </resources>
