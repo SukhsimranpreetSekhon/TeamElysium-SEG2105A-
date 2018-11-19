@@ -47,7 +47,7 @@
     </string-array>
     <string name="btn_save">Save</string>
     <string-array name="time_slots">
-        <item>8:00 &#8211; 10:00</item>
+        <item>08:00 &#8211; 10:00</item>
         <item>10:00 &#8211; 12:00</item>
         <item>12:00 &#8211; 14:00</item>
         <item>14:00 &#8211; 16:00</item>

@@ -1,6 +1,7 @@
 package com.example.vekshan.myapplication;
 
 import android.support.annotation.NonNull;
+import android.support.v4.app.INotificationSideChannel;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -24,6 +25,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class AddAvailability extends AppCompatActivity {
@@ -40,9 +42,12 @@ public class AddAvailability extends AppCompatActivity {
     private ArrayAdapter<CharSequence> adapterTimeSlots;
 
     private ListView listViewAvailability;
-    private List<Availability> availaibilityList;
+    private List<Availability> availabilityList;
     
     private DatabaseReference dataServiceProv;
+
+    private HashMap<String,Integer> map;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -68,6 +73,16 @@ public class AddAvailability extends AppCompatActivity {
         adapterTimeSlots.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerTimeSlots.setAdapter(adapterTimeSlots);
 
+        //hashmap for id
+        map = new HashMap<>();
+        map.put("Monday",0);
+        map.put("Tuesday",1);
+        map.put("Wednesday",2);
+        map.put("Thursday",3);
+        map.put("Friday",4);
+        map.put("Saturday",5);
+        map.put("Sunday",6);
+
 
 
         //Setting Button Listeners
@@ -80,7 +95,7 @@ public class AddAvailability extends AppCompatActivity {
 
         //Creating List for Services Availability
         listViewAvailability = findViewById(R.id.availability_list);
-        availaibilityList = new ArrayList<>();
+        availabilityList = new ArrayList<>();
 
         final String id = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
@@ -90,7 +105,7 @@ public class AddAvailability extends AppCompatActivity {
         listViewAvailability.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-                Availability availability =  availaibilityList.get((position));
+                Availability availability =  availabilityList.get((position));
                 openAvailabilityDialog(availability.getId(),availability.getDay(),availability.getTimeslot());
                 return true;
             }
@@ -100,21 +115,21 @@ public class AddAvailability extends AppCompatActivity {
    @Override
     protected void onStart() {
         super.onStart();
-        dataServiceProv.orderByChild("day").addValueEventListener(new ValueEventListener() {
+        dataServiceProv.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
-                availaibilityList.clear();
+                availabilityList.clear();
 
                 for(DataSnapshot availabilitySnapshot: dataSnapshot.getChildren()) {
 
                     Availability availability = availabilitySnapshot.getValue(Availability.class);
 
-                    availaibilityList.add(availability);
+                    availabilityList.add(availability);
 
                 }
 
-                ListOfAvailabilities availabilitiesAdapter = new ListOfAvailabilities(AddAvailability.this, availaibilityList);
+                ListOfAvailabilities availabilitiesAdapter = new ListOfAvailabilities(AddAvailability.this, availabilityList);
                 listViewAvailability.setAdapter(availabilitiesAdapter);
 
 
@@ -148,7 +163,7 @@ public class AddAvailability extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                     String timeslot = spinner.getSelectedItem().toString().trim();
-                    updateAvailability(id, timeslot);
+                    updateAvailability(id, day, timeslot);
                     availabilityDialog.dismiss();
             }
         });
@@ -165,15 +180,20 @@ public class AddAvailability extends AppCompatActivity {
 
     }
 
-    public void updateAvailability(final String id, final String timeslot){
+    public void updateAvailability(final String id, final String day, final String timeslot){
         DatabaseReference data = dataServiceProv.child(id);
-        data.child("timeslot").setValue(timeslot).addOnCompleteListener(new OnCompleteListener<Void>() {
+        data.removeValue();
+
+        String newId = map.get(day)+timeslot;
+        Availability availability = new Availability(newId, day, timeslot);
+
+        dataServiceProv.child(newId).setValue(availability).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
                 if(task.isSuccessful()){
-                    Toast.makeText(getApplicationContext(), "Update Successful!", Toast.LENGTH_LONG).show();
-                }else{
-                    Toast.makeText(getApplicationContext(), "Could not write to database", Toast.LENGTH_LONG).show();
+                    Toast.makeText(AddAvailability.this, "Update Successful!", Toast.LENGTH_LONG).show();
+                } else{
+                    Toast.makeText(AddAvailability.this, "Could not update availability!", Toast.LENGTH_LONG).show();
                 }
             }
         });
@@ -193,8 +213,11 @@ public class AddAvailability extends AppCompatActivity {
         String dayOfTheWeek = spinnerWeekdays.getSelectedItem().toString().trim();
         String timeslot = spinnerTimeSlots.getSelectedItem().toString().trim();
 
-        String id = dataServiceProv.push().getKey();
+
+        String id = map.get(dayOfTheWeek)+timeslot;
+
         Availability availability = new Availability(id, dayOfTheWeek, timeslot);
+
 
         dataServiceProv.child(id).setValue(availability).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
