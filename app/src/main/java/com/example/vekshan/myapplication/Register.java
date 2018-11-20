@@ -30,7 +30,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 
-public class Register extends AppCompatActivity{
+public class Register extends AppCompatActivity implements View.OnClickListener{
     private TextView txt_view_Login;
     private Button btnRegister;
     private EditText edit_txt_Email;
@@ -73,21 +73,8 @@ public class Register extends AppCompatActivity{
         spinnerChoice.setAdapter(adapter);
 
         //Setting listeners
-        btnRegister.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //call method register
-                register();
-            }
-        });
-
-        txt_view_Login.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //open the MainActivity which is the log in screen
-                startActivity(new Intent(v.getContext(), MainActivity.class));
-            }
-        });
+        btnRegister.setOnClickListener(this);
+        txt_view_Login.setOnClickListener(this);
 
     }
 
@@ -191,7 +178,7 @@ public class Register extends AppCompatActivity{
                                     }
 
                                     //open the Welcome screen
-                                    Intent intent = new Intent(getApplicationContext(), WelcomeScreenActivity.class);
+                                    Intent intent = new Intent(getApplicationContext(), ProviderScreen.class);
                                     intent.putExtra("role",accountType);
                                     intent.putExtra("name",firstName);
                                     finish(); //finish this activity before opening a new one
@@ -237,4 +224,14 @@ public class Register extends AppCompatActivity{
 
     }
 
+    @Override
+    public void onClick(View v) {
+        if (v == txt_view_Login) {
+            startActivity(new Intent(this, MainActivity.class));
+        }
+        if (v == btnRegister) {
+            register();
+            finish();
+        }
+    }
 }

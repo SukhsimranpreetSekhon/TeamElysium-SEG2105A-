@@ -28,7 +28,7 @@ import com.google.firebase.database.ValueEventListener;
 import org.w3c.dom.Text;
 
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements View.OnClickListener{
 
     private Button btnLogIn;
     private EditText edit_txt_Email;
@@ -67,24 +67,24 @@ public class MainActivity extends AppCompatActivity {
         spinnerChoice.setAdapter(adapter);
 
         //Setting listeners
-        btnLogIn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //call login method
-                login();
-            }
-        });
-        txt_view_Register.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //open RegisterActivity which is the signup screen
-                startActivity(new Intent(v.getContext(), Register.class));
-            }
-        });
-
+        btnLogIn.setOnClickListener(this);
+        txt_view_Register.setOnClickListener(this);
+        data = FirebaseDatabase.getInstance().getReference();
 
     }
 
+    @Override
+    public void onClick(View v) {
+        if ( v== btnLogIn){
+            login();
+        }
+
+        if( v == txt_view_Register){
+            startActivity(new Intent(this, Register.class));
+            finish();
+        }
+
+    }
 
     private void loginFailed(){
         Toast.makeText(MainActivity.this,"Log in Failed! Please try again!", Toast.LENGTH_SHORT).show();
@@ -123,7 +123,7 @@ public class MainActivity extends AppCompatActivity {
             public void onComplete(@NonNull Task<AuthResult> task) {
 
                 if (task.isSuccessful()){
-                    data = FirebaseDatabase.getInstance().getReference().child(accountType).child(FirebaseAuth.getInstance().getCurrentUser().getUid());
+                    data = data.child(accountType).child(FirebaseAuth.getInstance().getCurrentUser().getUid());
 
                     //implement code to see required login screen
                   listener1 = data.addValueEventListener(new ValueEventListener() {
@@ -180,7 +180,10 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onStop() {
         super.onStop();
-        data.removeEventListener(listener1);
-        data.removeEventListener(listener2);
+        if(listener1 != null && listener2 != null){
+            data.removeEventListener(listener1);
+            data.removeEventListener(listener2);
+        }
+
     }
 }
