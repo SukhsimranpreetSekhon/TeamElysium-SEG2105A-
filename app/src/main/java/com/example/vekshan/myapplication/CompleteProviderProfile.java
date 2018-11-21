@@ -1,5 +1,6 @@
 package com.example.vekshan.myapplication;
 
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
@@ -14,6 +15,8 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
@@ -142,18 +145,27 @@ public class CompleteProviderProfile extends AppCompatActivity {
         ProviderAddress address = new ProviderAddress(buildingNum, streetName, cityName, province, postalCode);
         dataServiceProv.child("address").setValue(address);
         dataServiceProv.child("companyName").setValue(companyName);
-        checkBoxLicensed.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+
+        /*if (checkBoxLicensed.isChecked()) {
+            dataServiceProv.child("licensed").setValue(true);
+        }else{
+            dataServiceProv.child("licensed").setValue(false);
+        }*/
+
+        dataServiceProv.child("generalInfo").setValue(generalDescription).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if(isChecked){
-                    dataServiceProv.child("licensed").setValue(isChecked);
+            public void onComplete(@NonNull Task<Void> task) {
+                if(task.isSuccessful()){
+                    Toast.makeText(CompleteProviderProfile.this, "Profile Completed!", Toast.LENGTH_SHORT).show();
+                    finish();
                 } else{
-                    dataServiceProv.child("licensed").setValue(isChecked);
+                    Toast.makeText(CompleteProviderProfile.this,"Unable to complete profile! ", Toast.LENGTH_SHORT).show();
                 }
             }
         });
 
-        dataServiceProv.child("generalInfo").setValue(generalDescription);
+
+
 
     }
 }

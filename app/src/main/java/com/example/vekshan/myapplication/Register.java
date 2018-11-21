@@ -226,7 +226,7 @@ public class Register extends AppCompatActivity implements View.OnClickListener{
 
 
                 }else{
-                    Toast.makeText(Register.this,"Registration Failed! Please try again!",Toast.LENGTH_LONG).show();
+                    Toast.makeText(Register.this,"Registration Failed! Please try again!" + task.getException().getMessage(),Toast.LENGTH_LONG).show();
                 }
             }
         });
@@ -241,7 +241,6 @@ public class Register extends AppCompatActivity implements View.OnClickListener{
         }
         if (v == btnRegister) {
             register();
-            finish();
         }
     }
 }
