@@ -84,7 +84,7 @@ public class Register extends AppCompatActivity implements View.OnClickListener{
         final String password = edit_txt_Password.getText().toString().trim();
         final String firstName = edit_txt_FirstName.getText().toString().trim();
         final String lastName = edit_txt_LastName.getText().toString().trim();
-        final String phoneNumber = edit_txt_PhoneNumber.getText().toString().trim();
+        final String phoneNumber = edit_txt_PhoneNumber.getText().toString().trim().replaceAll(" ", "");
         final String accountType = spinnerChoice.getSelectedItem().toString().trim();
 
 
@@ -121,6 +121,16 @@ public class Register extends AppCompatActivity implements View.OnClickListener{
         if(TextUtils.isEmpty(phoneNumber)){
             Toast.makeText(Register.this, "Phone Number field cannot be empty!", Toast.LENGTH_SHORT).show();
             return;
+        }
+
+
+        if(!(phoneNumber.length() == 10)){
+          Toast.makeText(Register.this, "Invalid Canadian Phone Number", Toast.LENGTH_SHORT).show();
+        }
+        for(int i = 0; i<phoneNumber.length(); i++) {
+          if(!Character.isDigit(phoneNumber.charAt(i))){
+              Toast.makeText(Register.this, "Invalid Phone Number", Toast.LENGTH_SHORT).show();
+          }
         }
 
             firebaseAuth.createUserWithEmailAndPassword(email,password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {

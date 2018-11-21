@@ -4,9 +4,10 @@ public class ProviderAddress {
     private String buildingNum;
     private String streetName;
     private String city;
+    private String province;
     private String postalCode;
 
-    public ProviderAddress(String buildingNum, String streetName, String city, String postalCode){
+    public ProviderAddress(String buildingNum, String streetName, String city, String province, String postalCode){
         this.buildingNum = buildingNum;
         this.streetName = streetName;
         this.city = city;
@@ -39,6 +40,14 @@ public class ProviderAddress {
 
     public void setCity(String city) {
         this.city = city;
+    }
+
+    public String getProvince() {
+        return province;
+    }
+
+    public void setProvince(String province) {
+        this.province = province;
     }
 
     public String getPostalCode() {
