@@ -12,6 +12,7 @@ public class ProviderAddress {
         this.streetName = streetName;
         this.city = city;
         this.postalCode = postalCode;
+        //this.province = province;
     }
 
     public ProviderAddress(){
