@@ -6,13 +6,19 @@ public class ServiceProvider  extends User {
     private String address;
     private String generalDescription;
     private String companyName;
+    private String id;
 
     public ServiceProvider(String firstName, String lastName, String email, String phoneNumber) {
         super(firstName, lastName, email, phoneNumber);
+        this.licensed=licensed;
+
     }
 
     public ServiceProvider(){
 
+    }
+    public ServiceProvider(String id) {
+        this.id=id;
     }
 
     public String getCompanyName() {

@@ -81,7 +81,11 @@ public class AddServices extends AppCompatActivity {
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                     if(isChecked){
                         dataServiceProv.child(service.getServiceId()).setValue(service);
+                        //ADD LINK TO CURRENT USER TO THIS SERVICE - ID ?
+                        dataServices.child(service.getServiceId()).child("Providers").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).setValue(FirebaseAuth.getInstance().getCurrentUser().getUid());
+
                     } else{
+                        dataServices.child(service.getServiceId()).child("Providers").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).removeValue();
                         dataServiceProv.child(service.getServiceId()).removeValue();
                     }
                 }

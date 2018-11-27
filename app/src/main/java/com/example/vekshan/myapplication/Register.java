@@ -210,7 +210,7 @@ public class Register extends AppCompatActivity implements View.OnClickListener{
                                 if(task.isSuccessful()) {
                                     Toast.makeText(Register.this,"Registration Complete",Toast.LENGTH_LONG).show();{
                                     }
-                                    Intent intent = new Intent(getApplicationContext(), WelcomeScreenActivity.class);
+                                    Intent intent = new Intent(getApplicationContext(), HomeOwnerScreen.class);
                                     intent.putExtra("role",accountType);
                                     intent.putExtra("name",firstName);
                                     finish(); //finish this activity before opening a new one

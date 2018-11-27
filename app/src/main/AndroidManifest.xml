@@ -30,7 +30,10 @@
         <activity android:name=".AddServices" />
         <activity android:name=".ProviderScreen" />
         <activity android:name=".AddAvailability" />
-        <activity android:name=".CompleteProviderProfile"></activity>
+        <activity android:name=".CompleteProviderProfile" />
+        <activity android:name=".SelectService" />
+        <activity android:name=".HomeOwnerScreen" />
+        <activity android:name=".SearchScreen"></activity>
     </application>
 
 </manifest>

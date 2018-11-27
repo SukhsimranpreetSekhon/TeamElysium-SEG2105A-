@@ -214,15 +214,18 @@ public class AddAvailability extends AppCompatActivity {
         String timeslot = spinnerTimeSlots.getSelectedItem().toString().trim();
 
 
-        String id = map.get(dayOfTheWeek)+timeslot;
+        final String id = map.get(dayOfTheWeek)+timeslot;
+        final DatabaseReference dataAvailability = FirebaseDatabase.getInstance().getReference("Availability").child(id).child(FirebaseAuth.getInstance().getCurrentUser().getUid());
 
         Availability availability = new Availability(id, dayOfTheWeek, timeslot);
+
 
 
         dataServiceProv.child(id).setValue(availability).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
                 if(task.isSuccessful()){
+                    dataAvailability.setValue(FirebaseAuth.getInstance().getCurrentUser().getUid());
                     Toast.makeText(AddAvailability.this, "Availability added!", Toast.LENGTH_LONG).show();
                 } else{
                     Toast.makeText(AddAvailability.this, "Could not add availability!", Toast.LENGTH_LONG).show();

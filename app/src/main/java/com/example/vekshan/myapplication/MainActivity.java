@@ -142,7 +142,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                                             }else if(accountType.equals("ServiceProvider")){ //HomeOwner or ServiceProvider
                                                 intent = new Intent(getApplicationContext(), ProviderScreen.class);
                                             }else{
-                                                intent = new Intent(getApplicationContext(), WelcomeScreenActivity.class);
+                                                intent = new Intent(getApplicationContext(), HomeOwnerScreen.class);
                                             }
 
                                             intent.putExtra("role",accountType);

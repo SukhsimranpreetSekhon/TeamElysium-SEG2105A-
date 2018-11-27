@@ -126,7 +126,7 @@ public class CompleteProviderProfile extends AppCompatActivity {
 
         // Incorrect Street Name
         for(int i = 0; i < streetName.length(); i++){
-            if(!Character.isLetter(streetName.charAt(i))){
+            if(!Character.isLetter(streetName.charAt(i)) && !Character.isWhitespace(streetName.charAt(i))){
                 Toast.makeText(CompleteProviderProfile.this,"Street Name is Invalid", Toast.LENGTH_SHORT).show();
                 return;
             }
