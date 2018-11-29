@@ -43,7 +43,7 @@ public class HomeOwnerScreen extends AppCompatActivity implements View.OnClickLi
     @Override
     public void onClick(View v) {
         if(v == btnSelectService){
-            startActivity(new Intent(this, SelectService.class));
+            startActivity(new Intent(this, SearchScreen.class));
         }
 
     }

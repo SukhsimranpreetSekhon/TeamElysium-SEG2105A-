@@ -48,5 +48,12 @@
         android:layout_height="wrap_content"
         android:text="Search"
         android:layout_below="@id/spinnerTimeSlots"/>
+    <ListView
+        android:id="@+id/listViewProv"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/btnSearch">
+
+    </ListView>
 
 </RelativeLayout>
