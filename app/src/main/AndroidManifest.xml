@@ -33,6 +33,7 @@
         <activity android:name=".CompleteProviderProfile" />
         <activity android:name=".HomeOwnerScreen" />
         <activity android:name=".SearchScreen" />
+        <activity android:name=".RatingsScreen"></activity>
     </application>
 
 </manifest>

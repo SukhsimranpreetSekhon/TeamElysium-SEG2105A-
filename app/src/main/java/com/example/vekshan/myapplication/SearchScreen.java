@@ -1,15 +1,23 @@
 package com.example.vekshan.myapplication;
 
+import android.content.DialogInterface;
 import android.support.annotation.NonNull;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -19,6 +27,7 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.ServiceConfigurationError;
 
 public class SearchScreen extends AppCompatActivity implements View.OnClickListener {
 
@@ -28,9 +37,12 @@ public class SearchScreen extends AppCompatActivity implements View.OnClickListe
     private ArrayAdapter<CharSequence> adapterTimeSlots;
     private HashMap<String,Integer> map;
     private DatabaseReference dataServiceProv;
+    private DatabaseReference dataHomeOwner;
     private Button btnSearchByAvailability;
     private List<ServiceProvider> provList;
+    private List<Service> serviceList;
     private ListView listViewProv;
+    private ServiceProvider prov;
 
 
     @Override
@@ -64,6 +76,7 @@ public class SearchScreen extends AppCompatActivity implements View.OnClickListe
 
         //DatabaseReference
         dataServiceProv = FirebaseDatabase.getInstance().getReference("ServiceProvider");
+        dataHomeOwner =FirebaseDatabase.getInstance().getReference("HomeOwner");
 
         btnSearchByAvailability= findViewById(R.id.btnSearch);
         btnSearchByAvailability.setOnClickListener(this);
@@ -71,6 +84,43 @@ public class SearchScreen extends AppCompatActivity implements View.OnClickListe
         listViewProv = findViewById(R.id.listViewProv);
 
         provList = new ArrayList<>();
+        serviceList = new ArrayList<>();
+
+        //Long Click Listener
+        listViewProv.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+                prov = provList.get(position);
+                final String provId = prov.getId();
+                dataServiceProv.child(provId).child("Services").addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        serviceList.clear();
+                        if(!dataSnapshot.exists()){
+                            Toast.makeText(SearchScreen.this, "No Services offered!", Toast.LENGTH_LONG).show();
+                        }else{
+                            for(DataSnapshot serviceSnapshot: dataSnapshot.getChildren()) {
+                                Service service = serviceSnapshot.getValue(Service.class);
+                                serviceList.add(service);
+                                openBookingDialog();
+                            }
+                        }
+
+
+
+
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                    }
+                });
+                return true;
+            }
+        });
+
+
 
     }
 
@@ -117,4 +167,58 @@ public class SearchScreen extends AppCompatActivity implements View.OnClickListe
 
 
     }
+
+
+    private void openBookingDialog(){
+
+        LayoutInflater layoutInflater = getLayoutInflater();
+        View view = layoutInflater.inflate(R.layout.booking_dialog, null);
+
+        final AlertDialog bookingDialog = new AlertDialog.Builder(this).create();
+        bookingDialog.setView(view);
+        bookingDialog.setTitle("Booking Service:");
+        bookingDialog.show();
+
+        final TextView text_view_info = view.findViewById(R.id.text_view_info);
+        final ListView listViewServices = view.findViewById(R.id.listViewServices);
+
+        ListOfServices serviceAdapter = new ListOfServices(SearchScreen.this,serviceList);
+        listViewServices.setAdapter(serviceAdapter);
+
+        listViewServices.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+                Service service = serviceList.get(position);
+                openConfirmationDialog();
+                return true;
+            }
+        });
+
+    }
+
+    private void openConfirmationDialog(){
+
+       AlertDialog.Builder confirmationDialog = new AlertDialog.Builder(this);
+       confirmationDialog.setTitle("Booking Confirmation");
+       confirmationDialog.setMessage("Is this the correct booking you want?");
+       confirmationDialog.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+           @Override
+           public void onClick(DialogInterface dialog, int which) {
+               dataHomeOwner.child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child("ServiceProviders").child(prov.getId()).setValue(prov).addOnCompleteListener(new OnCompleteListener<Void>() {
+                   @Override
+                   public void onComplete(@NonNull Task<Void> task) {
+                       if(task.isSuccessful()){
+                           Toast.makeText(getApplicationContext(), "Booked with Service Provider", Toast.LENGTH_SHORT).show();
+                       }else{
+                           Toast.makeText(getApplicationContext(), "Booking cannot be done at this time!", Toast.LENGTH_SHORT).show();
+                       }
+                   }
+               });
+           }
+       });
+       confirmationDialog.setNegativeButton("Cancel", null).show();
+
+
+    }
+
 }

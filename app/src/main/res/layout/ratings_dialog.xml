@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/txt_view_ratingsScore"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:textSize="24sp"
+        android:gravity="center"
+        android:text="@string/txt_view_ratingsScore"/>
+
+    <Spinner
+        android:id="@+id/spinnerRatings"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:textAlignment="center"
+        android:layout_below="@id/txt_view_ratingsScore"
+        android:entries="@array/ratings"/>
+
+    <EditText
+        android:id="@+id/edit_txt_ratingsComment"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:ems="10"
+        android:inputType="textPersonName"
+        android:layout_below="@id/spinnerRatings"
+        android:hint="@string/edit_ratings_comment" />
+
+    <Button
+        android:id="@+id/btnSubmitRating"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/edit_txt_ratingsComment"
+        android:text="@string/btn_submit_rating" />
+
+</RelativeLayout>

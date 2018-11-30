@@ -108,4 +108,26 @@
     <string name="btn_add_info">Add Info</string>
 
     <string name="info">Type Information Here</string>
+
+    <string name="btn_view_current_bookings">View Current Bookings</string>
+    <string name="btn_select_service">Select Service</string>
+    <string name="btn_rate_serviceProv">Rate Service Providers</string>
+    <string name="edit_ratings_comment">Review</string>
+    <string name="btn_submit_rating">Submit Rating</string>
+    <string name="txt_view_ratingsScore">Please enter a rating:</string>
+
+    <string-array name="ratings">
+
+        <item>1</item>
+
+        <item>2</item>
+
+        <item>3</item>
+
+        <item>4</item>
+
+        <item>5</item>
+
+    </string-array>
+
 </resources>

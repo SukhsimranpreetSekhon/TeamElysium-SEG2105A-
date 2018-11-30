@@ -45,6 +45,8 @@ public class HomeOwnerScreen extends AppCompatActivity implements View.OnClickLi
         if(v == btnSelectService){
             startActivity(new Intent(this, SearchScreen.class));
         }
-
+        if (v == btnRateServiceProv){
+            startActivity(new Intent(this, RatingsScreen.class));
+        }
     }
 }
