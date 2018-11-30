@@ -15,6 +15,8 @@ import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -33,6 +35,7 @@ public class RatingsScreen extends AppCompatActivity {
     private ServiceProvider prov;
     private DatabaseReference dataServiceProv;
     private DatabaseReference dataPastProv;
+    private ValueEventListener listener;
 
 
     @Override
@@ -89,14 +92,21 @@ public class RatingsScreen extends AppCompatActivity {
                 String ratingsComment = edit_txt_ratingsComment.getText().toString().trim();
 
                 final DatabaseReference dataRating = dataServiceProv.child(prov.getId()).child("rating");
-                dataRating.addValueEventListener(new ValueEventListener() {
+
+                listener = dataRating.addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                         if (dataSnapshot.exists()){
                            Double rating = dataSnapshot.getValue(Double.class);
                            dataRating.setValue((rating+ratingScore)/2);
+                           ratingsDialog.dismiss();
+                           dataRating.removeEventListener(listener);
+                           Toast.makeText(getApplicationContext(), "Rating Added!", Toast.LENGTH_LONG).show();
                         }else{
                             dataRating.setValue(ratingScore);
+                            ratingsDialog.dismiss();
+                            dataRating.removeEventListener(listener);
+                            Toast.makeText(getApplicationContext(), "Rating Added!", Toast.LENGTH_LONG).show();
                         }
                     }
 
