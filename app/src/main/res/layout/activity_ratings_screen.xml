@@ -9,7 +9,7 @@
     tools:context=".RatingsScreen">
 
     <ListView
-        android:id="@+id/pastServicesList"
+        android:id="@+id/pastProvidersList"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:textAlignment="center" />

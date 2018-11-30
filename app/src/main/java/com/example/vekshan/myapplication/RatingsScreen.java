@@ -1,5 +1,7 @@
 package com.example.vekshan.myapplication;
 
+import android.provider.ContactsContract;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -11,21 +13,26 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Spinner;
+import android.widget.Toast;
+
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class RatingsScreen extends AppCompatActivity implements View.OnClickListener{
+public class RatingsScreen extends AppCompatActivity {
 
-    private Spinner spinnerRatings;
+    private ListView listViewProv;
 
-    private EditText ratingsComment;
-
-    private Button btn_submitRating;
-
-    private ListView listViewPastServices;
-
-    private List<ServiceProvider> pastServicesList;
+    private List<ServiceProvider> pastProvidersList;
+    private ServiceProvider prov;
+    private DatabaseReference dataServiceProv;
+    private DatabaseReference dataPastProv;
 
 
     @Override
@@ -34,30 +41,33 @@ public class RatingsScreen extends AppCompatActivity implements View.OnClickList
         setContentView(R.layout.activity_ratings_screen);
 
         //Database
+        dataServiceProv = FirebaseDatabase.getInstance().getReference("ServiceProvider");
+        dataPastProv = FirebaseDatabase.getInstance().getReference("HomeOwner").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child("ServiceProviders");
 
-        spinnerRatings = findViewById(R.id.spinnerRatings);
+        /*spinnerRatings = findViewById(R.id.spinnerRatings);
         ratingsComment = findViewById(R.id.edit_txt_ratingsComment);
         btn_submitRating = findViewById(R.id.btnSubmitRating);
 
         //Setting Button Listeners
         btn_submitRating.setOnClickListener(this);
+        */
 
-        //Creating List for Services
-        listViewPastServices = findViewById(R.id.pastServicesList);
-        pastServicesList = new ArrayList<>();
+        //Creating List
+        listViewProv = findViewById(R.id.pastProvidersList);
+        pastProvidersList = new ArrayList<>();
 
         //Long Click Listener
-        listViewPastServices.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+        listViewProv.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-                ServiceProvider pastService = pastServicesList.get(position);
-                //openRatingsDialog(pastService.getId(), pastService.getRatingsScore, pastService.getRatingsComment());
+                prov = pastProvidersList.get(position);
+                openRatingsDialog();
                 return true;
             }
         });
     }
 
-    private void openRatingsDialog(final String pastServiceId, final String ratingScore, final String ratingComment) {
+    private void openRatingsDialog() {
 
         LayoutInflater layoutInflater = getLayoutInflater();
         View view = layoutInflater.inflate(R.layout.ratings_dialog, null);
@@ -70,29 +80,36 @@ public class RatingsScreen extends AppCompatActivity implements View.OnClickList
         final Spinner spinnerRatings = view.findViewById(R.id.spinnerRatings);
         final EditText edit_txt_ratingsComment = view.findViewById(R.id.edit_txt_ratingsComment);
 
-        final Button btnSubmitRating = view.findViewById(R.id.btnSubmitRating);
-
-       /* btnSubmitRating.setOnClickListener(new View.OnClickListener() {
+        Button btnSubmitRating = view.findViewById(R.id.btnSubmitRating);
+        btnSubmitRating.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void OnClick(View v) {
+            public void onClick(View v) {
 
-                String ratingScore = spinnerRatings.getSelectedItem().toString().trim();
+                final Double ratingScore = Double.parseDouble(spinnerRatings.getSelectedItem().toString().trim());
                 String ratingsComment = edit_txt_ratingsComment.getText().toString().trim();
 
-                if (!TextUtils.isEmpty(ratingScore) && !TextUtils.isEmpty(ratingsComment)){
-                    addRating();
-                    ratingsDialog.dismiss();
+                final DatabaseReference dataRating = dataServiceProv.child(prov.getId()).child("rating");
+                dataRating.addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        if (dataSnapshot.exists()){
+                           Double rating = dataSnapshot.getValue(Double.class);
+                           dataRating.setValue((rating+ratingScore)/2);
+                        }else{
+                            dataRating.setValue(ratingScore);
+                        }
+                    }
 
-                } else if (TextUtils.isEmpty(ratingScore) && !TextUtils.isEmpty(ratingsComment)){
-                    addRating();
-                    ratingsDialog.dismiss();
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
 
-                } else {
-                    addRating();
-                    ratingsDialog.dismiss();
-                }
+                    }
+                });
+
+
+
             }
-        });*/
+        });
 
     }
 
@@ -103,7 +120,31 @@ public class RatingsScreen extends AppCompatActivity implements View.OnClickList
     }
 
     @Override
-    public void onClick(View v) {
+    protected void onStart() {
+        super.onStart();
+        dataPastProv.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
+                pastProvidersList.clear();
+                for(DataSnapshot provSnapshot: dataSnapshot.getChildren()) {
+                    String provId =provSnapshot.child("id").getValue(String.class);
+                    String provName = provSnapshot.child("firstName").getValue(String.class);
+                    String provPhone= provSnapshot.child("phoneNumber").getValue(String.class);
+                    ServiceProvider pastProv = new ServiceProvider(provId,provName,provPhone);
+                    pastProvidersList.add(pastProv);
+                }
+
+                ListOfServiceProviders provAdapter =new ListOfServiceProviders(RatingsScreen.this,pastProvidersList);
+                listViewProv.setAdapter(provAdapter);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
     }
+
+
 }
