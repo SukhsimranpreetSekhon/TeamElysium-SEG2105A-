@@ -33,16 +33,22 @@
             android:gravity="center" />
 
         <Button
+            android:id="@+id/btnSearchByAvailability"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Search by Availability" />
+
+        <Button
             android:id="@+id/btnSelectService"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Select Service" />
+            android:text="Search by Service"/>
 
         <Button
             android:id="@+id/btnRateProv"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Rate Service Providers" />
+            android:text="Rate my Service Providers" />
 
         <Button
             android:id="@+id/btnLogout"

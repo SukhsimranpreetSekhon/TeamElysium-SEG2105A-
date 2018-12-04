@@ -11,6 +11,7 @@ public class HomeOwnerScreen extends AppCompatActivity implements View.OnClickLi
     private TextView txt_view_Role;
     private String role;
     private String name;
+    private Button btnSearchByAvailability;
     private Button btnSelectService;
     private Button btnLogout;
     private Button btnRateServiceProv;
@@ -20,6 +21,7 @@ public class HomeOwnerScreen extends AppCompatActivity implements View.OnClickLi
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home_owner_screen);
 
+        btnSearchByAvailability =findViewById(R.id.btnSearchByAvailability);
         btnSelectService =findViewById(R.id.btnSelectService);
         btnRateServiceProv = findViewById(R.id.btnRateProv);
         btnLogout = findViewById(R.id.btnLogout);
@@ -27,6 +29,7 @@ public class HomeOwnerScreen extends AppCompatActivity implements View.OnClickLi
         //Setting listeners
         btnLogout.setOnClickListener(this);
         btnRateServiceProv.setOnClickListener(this);
+        btnSearchByAvailability.setOnClickListener(this);
         btnSelectService.setOnClickListener(this);
 
         txt_view_Role = findViewById(R.id.txt_view_Role);
@@ -42,8 +45,11 @@ public class HomeOwnerScreen extends AppCompatActivity implements View.OnClickLi
 
     @Override
     public void onClick(View v) {
-        if(v == btnSelectService){
+        if(v == btnSearchByAvailability){
             startActivity(new Intent(this, SearchScreen.class));
+        }
+        if(v == btnSelectService){
+            startActivity(new Intent(this, SelectService.class));
         }
         if (v == btnRateServiceProv){
             startActivity(new Intent(this, RatingsScreen.class));
