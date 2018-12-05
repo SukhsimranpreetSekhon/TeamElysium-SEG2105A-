@@ -122,23 +122,7 @@ public class ProviderScreen extends AppCompatActivity implements View.OnClickLis
             });
 
         }
-        /*if(v == btnLogout) {
-            startActivity(new Intent(this, MainActivity.class));
-            finish();
-        }
-        if(v== btnAddServices) {
-            startActivity(new Intent(this, AddServices.class));
-            finish();
-        }
-        if (v == btnServicesAvailability){
-            startActivity(new Intent(this, AddAvailability.class));
-            finish();
-        }
 
-        if (v == btnCompleteProfile){
-            startActivity(new Intent(this, CompleteProviderProfile.class));
-            //finish();
-        }*/
 
 
     }

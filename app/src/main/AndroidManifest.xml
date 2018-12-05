@@ -25,7 +25,6 @@
             </intent-filter>
         </activity>
         <activity android:name=".WelcomeScreenActivity" />
-        <activity android:name=".AdminScreen" />
         <activity android:name=".ManageServices" />
         <activity android:name=".AddServices" />
         <activity android:name=".ProviderScreen" />

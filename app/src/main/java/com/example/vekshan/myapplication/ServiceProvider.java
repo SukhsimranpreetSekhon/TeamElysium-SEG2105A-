@@ -9,12 +9,28 @@ public class ServiceProvider  extends User {
     private String generalDescription;
     private String companyName;
     private String id;
+    private String password;
 
 
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
 
     public ServiceProvider(String firstName, String lastName, String email, String phoneNumber) {
+
         super(firstName, lastName, email, phoneNumber);
         this.licensed=licensed;
+
+    }
+
+    public ServiceProvider(String firstName, String lastName, String email, String phoneNumber,String password) {
+        super(firstName, lastName, email, phoneNumber);
+        this.licensed=licensed;
+        this.password= password;
 
     }
 

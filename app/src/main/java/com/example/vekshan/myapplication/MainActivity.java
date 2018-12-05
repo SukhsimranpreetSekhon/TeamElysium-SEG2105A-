@@ -102,19 +102,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             return;
         }
 
-        if(!Patterns.EMAIL_ADDRESS.matcher(email).matches()){
-            edit_txt_Email.setError("Please enter a valid email");
-            edit_txt_Email.requestFocus();
-            return;
-        }
-
         if(TextUtils.isEmpty(password)){
             Toast.makeText(this, "Password field cannot be empty!", Toast.LENGTH_SHORT).show();
             return;
         }
 
-        if(password.length()<6){
-            edit_txt_Password.setError("Minimum length of password should be 6");
+        if(!Patterns.EMAIL_ADDRESS.matcher(email).matches()){
+            edit_txt_Email.setError("Please enter a valid email");
+            return;
         }
 
 

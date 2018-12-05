@@ -78,6 +78,19 @@ public class Register extends AppCompatActivity implements View.OnClickListener{
 
     }
 
+    /*Made by Jacque Burnham (jberm059@uottawa.ca),
+    8335054,
+    added for D4*/
+    private static String encrypt(String password) {
+        StringBuffer sb = new StringBuffer();
+        for (int i = 0; i< password.length(); i++) {
+            if (i%2==0)
+                sb.append((char)((password.charAt(i)+10)%89)+33);
+            else
+                sb.append((char)((password.charAt(i)+15)%89)+33);
+        }
+        return sb.toString();
+    }
 
     private void register() {
         final String email = edit_txt_Email.getText().toString().trim();
@@ -87,6 +100,8 @@ public class Register extends AppCompatActivity implements View.OnClickListener{
         final String phoneNumber = edit_txt_PhoneNumber.getText().toString().trim().replaceAll(" ", "");
         final String accountType = spinnerChoice.getSelectedItem().toString().trim();
 
+        final String encryptedPassword = encrypt(password);
+
 
       if(TextUtils.isEmpty(email)){
             Toast.makeText(Register.this, "Email field cannot be empty!", Toast.LENGTH_SHORT).show();
@@ -95,7 +110,6 @@ public class Register extends AppCompatActivity implements View.OnClickListener{
 
         if(!Patterns.EMAIL_ADDRESS.matcher(email).matches()){
             edit_txt_Email.setError("Please enter a valid email");
-            edit_txt_Email.requestFocus();
             return;
         }
 
@@ -144,7 +158,7 @@ public class Register extends AppCompatActivity implements View.OnClickListener{
                            @Override
                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                                if (!dataSnapshot.exists()) {
-                                   Administrator admin = new Administrator(firstName, lastName, email, phoneNumber);
+                                   Administrator admin = new Administrator(firstName, lastName, email, phoneNumber,encryptedPassword);
 
                                    dataAdmin.child(FirebaseAuth.getInstance().getCurrentUser().getUid()).setValue(admin).addOnCompleteListener(new OnCompleteListener<Void>() {
                                        @Override
@@ -178,7 +192,7 @@ public class Register extends AppCompatActivity implements View.OnClickListener{
                     }
 
                     if(accountType.equals("ServiceProvider")){
-                        ServiceProvider serviceProvider = new ServiceProvider(firstName, lastName, email, phoneNumber);
+                        ServiceProvider serviceProvider = new ServiceProvider(firstName, lastName, email, phoneNumber,encryptedPassword);
 
                         dataServiceProvider.child(FirebaseAuth.getInstance().getCurrentUser().getUid()).setValue(serviceProvider).addOnCompleteListener(new OnCompleteListener<Void>() {
                             @Override
@@ -202,7 +216,7 @@ public class Register extends AppCompatActivity implements View.OnClickListener{
                     }
 
                     if(accountType.equals("HomeOwner")){
-                        HomeOwner homeowner = new HomeOwner(firstName,lastName,email,phoneNumber);
+                        HomeOwner homeowner = new HomeOwner(firstName,lastName,email,phoneNumber,encryptedPassword);
 
                         dataHomeOwner.child(FirebaseAuth.getInstance().getCurrentUser().getUid()).setValue(homeowner).addOnCompleteListener(new OnCompleteListener<Void>() {
                             @Override

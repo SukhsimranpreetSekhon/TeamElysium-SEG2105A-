@@ -1,14 +1,21 @@
 package com.example.vekshan.myapplication;
 
+import android.content.DialogInterface;
 import android.support.annotation.NonNull;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Spinner;
+import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -31,6 +38,7 @@ public class SearchByService extends AppCompatActivity implements View.OnClickLi
     private String serviceId;
     private ListView listViewProv;
     private List<ServiceProvider> provList;
+    private DatabaseReference dataHomeOwner;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,8 +66,18 @@ public class SearchByService extends AppCompatActivity implements View.OnClickLi
 
         btnSearchByAvailability.setOnClickListener(this);
 
+        dataHomeOwner =FirebaseDatabase.getInstance().getReference("HomeOwner");
+
         listViewProv = findViewById(R.id.result_list);
 
+        listViewProv.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+                openConfirmationDialog(provList.get(position));
+                return true;
+            }
+
+        });
 
         dataServiceProv = FirebaseDatabase.getInstance().getReference("ServiceProvider");
 
@@ -75,6 +93,33 @@ public class SearchByService extends AppCompatActivity implements View.OnClickLi
         map.put("Saturday",5);
         map.put("Sunday",6);
     }
+
+    private void openConfirmationDialog(final ServiceProvider prov){
+
+        AlertDialog.Builder confirmationDialog = new AlertDialog.Builder(this);
+        confirmationDialog.setTitle("Booking Confirmation");
+        confirmationDialog.setMessage("Is this the correct booking you want?");
+        confirmationDialog.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dataHomeOwner.child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child("ServiceProviders").child(prov.getId()).setValue(prov).addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if(task.isSuccessful()){
+                            //create new Booking and add to database
+                            Toast.makeText(getApplicationContext(), "Booked with Service Provider", Toast.LENGTH_SHORT).show();
+                        }else{
+                            Toast.makeText(getApplicationContext(), "Booking cannot be done at this time!", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
+            }
+        });
+        confirmationDialog.setNegativeButton("Cancel", null).show();
+
+
+    }
+
 
     @Override
     public void onClick(View v) {

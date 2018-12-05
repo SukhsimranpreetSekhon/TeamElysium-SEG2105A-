@@ -38,6 +38,7 @@ public class SearchScreen extends AppCompatActivity implements View.OnClickListe
     private HashMap<String,Integer> map;
     private DatabaseReference dataServiceProv;
     private DatabaseReference dataHomeOwner;
+    private DatabaseReference dataBooking;
     private Button btnSearchByAvailability;
     private List<ServiceProvider> provList;
     private List<Service> serviceList;
@@ -190,14 +191,14 @@ public class SearchScreen extends AppCompatActivity implements View.OnClickListe
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
                 Service service = serviceList.get(position);
-                openConfirmationDialog();
+                openConfirmationDialog(service.getServiceName());
                 return true;
             }
         });
 
     }
 
-    private void openConfirmationDialog(){
+    private void openConfirmationDialog(String serviceName){
 
        AlertDialog.Builder confirmationDialog = new AlertDialog.Builder(this);
        confirmationDialog.setTitle("Booking Confirmation");
@@ -209,6 +210,7 @@ public class SearchScreen extends AppCompatActivity implements View.OnClickListe
                    @Override
                    public void onComplete(@NonNull Task<Void> task) {
                        if(task.isSuccessful()){
+                           //create new Booking and add to database
                            Toast.makeText(getApplicationContext(), "Booked with Service Provider", Toast.LENGTH_SHORT).show();
                        }else{
                            Toast.makeText(getApplicationContext(), "Booking cannot be done at this time!", Toast.LENGTH_SHORT).show();

@@ -94,7 +94,7 @@ public class ManageServices extends AppCompatActivity implements View.OnClickLis
 
     }
 
-    //based on lab 5
+    /*Custom dialog Views were based on material from Lab 5*/
     private void openServiceDialog(final String serviceId, final String serviceName, final double servicePrice){
 
         LayoutInflater layoutInflater = getLayoutInflater();
