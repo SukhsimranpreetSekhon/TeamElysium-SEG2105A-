@@ -1,3 +1,5 @@
+package com.example.vekshan.myapplication;
+
 import com.example.vekshan.myapplication.Availability;
 
 public class Booking {

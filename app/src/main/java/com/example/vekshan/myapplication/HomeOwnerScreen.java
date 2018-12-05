@@ -13,6 +13,7 @@ public class HomeOwnerScreen extends AppCompatActivity implements View.OnClickLi
     private String name;
     private Button btnSearchByAvailability;
     private Button btnSelectService;
+    private Button btnSearchByRating;
     private Button btnLogout;
     private Button btnRateServiceProv;
 
@@ -23,6 +24,7 @@ public class HomeOwnerScreen extends AppCompatActivity implements View.OnClickLi
 
         btnSearchByAvailability =findViewById(R.id.btnSearchByAvailability);
         btnSelectService =findViewById(R.id.btnSelectService);
+        btnSearchByRating=findViewById(R.id.btnSearchByRatings);
         btnRateServiceProv = findViewById(R.id.btnRateProv);
         btnLogout = findViewById(R.id.btnLogout);
 
@@ -31,6 +33,8 @@ public class HomeOwnerScreen extends AppCompatActivity implements View.OnClickLi
         btnRateServiceProv.setOnClickListener(this);
         btnSearchByAvailability.setOnClickListener(this);
         btnSelectService.setOnClickListener(this);
+        btnSearchByRating.setOnClickListener(this);
+
 
         txt_view_Role = findViewById(R.id.txt_view_Role);
         Intent intent = getIntent();
@@ -56,6 +60,9 @@ public class HomeOwnerScreen extends AppCompatActivity implements View.OnClickLi
         }
         if(v==btnLogout){
             startActivity(new Intent(this, MainActivity.class));
+        }
+        if(v==btnSearchByRating){
+            startActivity(new Intent(this, SearchByRating.class));
         }
     }
 }

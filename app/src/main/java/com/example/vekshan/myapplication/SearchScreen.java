@@ -178,7 +178,7 @@ public class SearchScreen extends AppCompatActivity implements View.OnClickListe
 
         final AlertDialog bookingDialog = new AlertDialog.Builder(this).create();
         bookingDialog.setView(view);
-        bookingDialog.setTitle("Booking Service:");
+        bookingDialog.setTitle("com.example.vekshan.myapplication.Booking Service:");
         bookingDialog.show();
 
         final TextView text_view_info = view.findViewById(R.id.text_view_info);
@@ -201,7 +201,7 @@ public class SearchScreen extends AppCompatActivity implements View.OnClickListe
     private void openConfirmationDialog(String serviceName){
 
        AlertDialog.Builder confirmationDialog = new AlertDialog.Builder(this);
-       confirmationDialog.setTitle("Booking Confirmation");
+       confirmationDialog.setTitle("com.example.vekshan.myapplication.Booking Confirmation");
        confirmationDialog.setMessage("Is this the correct booking you want?");
        confirmationDialog.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
            @Override
@@ -210,10 +210,10 @@ public class SearchScreen extends AppCompatActivity implements View.OnClickListe
                    @Override
                    public void onComplete(@NonNull Task<Void> task) {
                        if(task.isSuccessful()){
-                           //create new Booking and add to database
+                           //create new com.example.vekshan.myapplication.Booking and add to database
                            Toast.makeText(getApplicationContext(), "Booked with Service Provider", Toast.LENGTH_SHORT).show();
                        }else{
-                           Toast.makeText(getApplicationContext(), "Booking cannot be done at this time!", Toast.LENGTH_SHORT).show();
+                           Toast.makeText(getApplicationContext(), "com.example.vekshan.myapplication.Booking cannot be done at this time!", Toast.LENGTH_SHORT).show();
                        }
                    }
                });

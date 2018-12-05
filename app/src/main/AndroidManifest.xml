@@ -34,7 +34,8 @@
         <activity android:name=".SearchScreen" />
         <activity android:name=".RatingsScreen" />
         <activity android:name=".SearchByService" />
-        <activity android:name=".SelectService"></activity>
+        <activity android:name=".SelectService" />
+        <activity android:name=".SearchByRating"></activity>
     </application>
 
 </manifest>

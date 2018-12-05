@@ -45,6 +45,13 @@
             android:text="Search by Service"/>
 
         <Button
+            android:id="@+id/btnSearchByRatings"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Search by Rating"/>
+
+
+        <Button
             android:id="@+id/btnRateProv"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
