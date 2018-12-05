@@ -98,7 +98,7 @@ public class SearchByService extends AppCompatActivity implements View.OnClickLi
     private void openConfirmationDialog(final ServiceProvider prov){
 
         AlertDialog.Builder confirmationDialog = new AlertDialog.Builder(this);
-        confirmationDialog.setTitle("com.example.vekshan.myapplication.Booking Confirmation");
+        confirmationDialog.setTitle("Booking Confirmation");
         confirmationDialog.setMessage("Is this the correct booking you want?");
         confirmationDialog.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
             @Override
@@ -110,7 +110,7 @@ public class SearchByService extends AppCompatActivity implements View.OnClickLi
                             //create new com.example.vekshan.myapplication.Booking and add to database
                             Toast.makeText(getApplicationContext(), "Booked with Service Provider", Toast.LENGTH_SHORT).show();
                         }else{
-                            Toast.makeText(getApplicationContext(), "com.example.vekshan.myapplication.Booking cannot be done at this time!", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getApplicationContext(), "Booking cannot be done at this time!", Toast.LENGTH_SHORT).show();
                         }
                     }
                 });
